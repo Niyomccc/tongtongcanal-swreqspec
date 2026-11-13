@@ -4,5 +4,5 @@ import App from '../App.jsx'
 
 test('โครงหน้าจอเปิดได้', () => {
   render(<App />)
-  expect(screen.getByText('ระบบจองคิวตรวจสุขภาพ')).toBeTruthy()
+  expect(screen.getByRole('heading', { name: 'ลงทะเบียนเข้าชมงาน' })).toBeTruthy()
 })
