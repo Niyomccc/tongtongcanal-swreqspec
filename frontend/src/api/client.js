@@ -57,6 +57,10 @@ export const api = {
     return requestJson(`${BASE}/events/${encodeURIComponent(eventId)}`)
   },
 
+  async getScheduleByEventId(eventId) {
+    return requestJson(`${BASE}/events/${encodeURIComponent(eventId)}/schedule`)
+  },
+
   async getMyRegistrations({ user_id }) {
     const q = new URLSearchParams({ user_id: String(user_id) })
     const res = await fetch(`${BASE}/cancel-registration/me?${q}`)
