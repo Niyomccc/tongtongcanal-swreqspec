@@ -1058,3 +1058,228 @@
 - ผลลัพธ์: เพิ่ม 3 แถวสำหรับ AC-CXL-02 (ทางปกติ / ขอบ / ทางผิด) โดยยึด Then จาก AC-CXL-02 และ FR-CXL-03 ตาม spec เท่านั้น
 - ส่วนที่ spec ไม่ได้บอกชัด: กรณียกเลิกรายการที่มีอยู่แล้วเป็น "ยกเลิก" หรือไม่พบรายการจริง ยังเป็น Open Question (Q-08) จึงยังไม่สามารถตัดสินใจให้ผลลัพธ์ที่แน่นอนได้ และต้องรอทีมตรวจก่อนเปลี่ยนสถานะเป็น "ใช้ได้"
 - สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราไม่กำหนดข้อความหรือพฤติกรรมเกินที่ spec ระบุ
+
+---
+
+## 2026-11-13 คำสั่ง: /tasks
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่สร้าง: specs/006-bandapplication/tasks.md
+- ผลลัพธ์: สร้าง task breakdown แบบ vertical slice ครบ 13 tasks, แบ่งเป็น 5 เฟส และ 3 tasks ที่รอ Q-01 ถึง Q-03 ในเฟสรอคำตอบ
+- ข้อสรุป: เฟสแรกที่ลองใช้งานได้จริงคือเฟส 1 (เลือกอีเว้นต์ + ข้อมูลวง), เฟส 5 เป็นเฟสรอคำตอบสำหรับ Open Questions Q-01 ถึง Q-03
+
+## 2026-11-13 คำสั่ง: /implement T-01 specs/006-bandapplication/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/models/auth.py`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -q` → 20 passed in 0.78s
+- สิ่งที่ทำ: เพิ่มโครงสร้างข้อมูล `BandApplication`, `PerformanceSong`, `BandSnapshot` ตาม PRE-APP-01 เพื่อให้ระบบมีฐานสำหรับการสมัครเข้าร่วมแสดง โดยคงให้ task ที่เกี่ยวกับ Open Question Q-01 ถึง Q-03 ยังรอคำตอบตาม spec และไม่เริ่ม task ต่อไป
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; งานนี้จำกัดอยู่ที่โครงสร้างข้อมูลและโครงสร้างพื้นฐานตาม T-01 เท่านั้น และไม่เพิ่มกติกา/เงื่อนไขใหม่เกิน requirement ที่ระบุใน spec
+- ขอบเขต: ทำเฉพาะ T-01 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-02 specs/006-bandapplication/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/config.py`, `backend/app/auth/repository.py`, `backend/tests/test_band_application_seed.py`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -q tests/test_band_application_seed.py` → 2 passed in 0.02s
+- สิ่งที่ทำ: เตรียมข้อมูลอีเว้นต์ที่เปิดรับสมัคร 2 รายการ (`event-band-01`, `event-band-02`) และเพิ่ม helper สำหรับสร้าง `BandSnapshot` จากข้อมูลวงของ UC-07 เพื่อให้ T-03 ขึ้นไปสามารถใช้ฟอร์มสมัครได้ตาม FR-APP-01 และ FR-APP-02; ไม่เริ่ม task ต่อไป และยังคงปล่อย Q-01 ถึง Q-03 ไว้ตาม spec
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้ค่าที่ชัดเจนจาก spec สำหรับ “ข้อมูลวงที่ต้องมี” และไม่มีการกำหนดค่าข้อจำกัดสูงสุดที่ยังไม่ตอบ (Q-02) หรือมาตรการความปลอดภัยเพิ่มเติม (Q-03) จึงไม่เพิ่มเงื่อนไขนอก spec
+- ขอบเขต: ทำเฉพาะ T-02 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-03 specs/006-bandapplication/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/application.py`, `backend/app/main.py`, `backend/tests/test_band_application_seed.py`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -q tests/test_band_application_seed.py` → 4 passed in 0.44s
+- สิ่งที่ทำ: เพิ่ม API สำหรับ `GET /events/open` และ `GET /bands/me/application-profile` พร้อมตรวจ session ของวงที่เข้าสู่ระบบและรายงานความครบถ้วนของ field ที่ต้องใช้สำหรับใบสมัครตาม FR-APP-01, FR-APP-02 และ PRE-APP-01; ไม่เพิ่มกติกา/ข้อจำกัดใหม่เกิน spec และยังคงปล่อย Q-01 ถึง Q-03 ไว้ตามที่ task ยอมให้ในเฟสรอคำตอบ
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้สัญญา API อย่างตรงจาก spec และแค่ส่งข้อมูลวงแบบอ่านอย่างเดียว/ความครบถ้วนของ snapshot field เพื่อตอบ T-03 โดยไม่เริ่ม task ถัดไป
+- ขอบเขต: ทำเฉพาะ T-03 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-04 specs/006-bandapplication/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `frontend/src/pages/SelectEventPage.jsx`, `frontend/src/pages/BandApplicationPage.jsx`, `frontend/src/api/client.js`, `frontend/src/__tests__/BandApplicationPages.test.jsx`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- ผล test: `cd frontend && npm test -- --run src/__tests__/BandApplicationPages.test.jsx` → 2 passed; `cd frontend && npm run build` → build สำเร็จ
+- สิ่งที่ทำ: สร้างหน้าจอรายการอีเว้นต์ที่เปิดรับสมัครและฟอร์มอ่านข้อมูลวงแบบแก้ไขไม่ได้ พร้อมฟอร์มข้อมูลเพลง/การแสดง และเพิ่ม API client ที่แนบ `sessionId` ให้ endpoint ตาม FR-APP-01, FR-APP-02 และ PRE-APP-01; แก้ T-04 ให้ระบุ test file และขอบเขต test ของ UI
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: spec ไม่มีหมวด UI ที่ระบุข้อความ/ลำดับบังคับ จึงยึด FR-APP-01/02 และขอบเขต T-04; ไม่เพิ่มปุ่มส่งหรือ validation จาก FR-APP-03/05 และไม่แสดงกติกาที่ยังรอ Q-01/Q-02
+- ขอบเขต: ทำเฉพาะ T-04; คงหน้าจอเป็น components แยกตามคำยืนยันของทีม และรับ `sessionId` ผ่าน prop
+
+## 2026-11-13 คำสั่ง: /implement T-05 specs/006-bandapplication/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `prompt-log.md` เท่านั้น; ไม่มีการแก้ source code หรือ test
+- ผล test: ไม่ได้รัน เพราะหยุดก่อน implement ตามคำตอบของทีมให้พัก T-05 จนกว่าจะปิด Q-02
+- คำถาม/คำตอบของทีม: ทีมเลือกพัก T-05 เนื่องจากยังไม่ได้กำหนดเวลาการแสดงสูงสุดและจำนวนเพลงสูงสุดตาม Q-02; อนุญาตเพิ่ม test file ได้เมื่อกลับมาทำต่อ
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่กำหนดค่าข้อจำกัดหรือวิธีผูกค่าเข้ากับอีเว้นต์เอง เพราะ Q-02 ยังเปิด
+- ขอบเขต: ไม่เริ่ม validation และไม่เปลี่ยนสถานะ T-05; ใน tasks.md สถานะยังเป็น “พร้อมทำ” จึงควรปรับเป็น “รอ Q-02” หลังทีมยืนยันการแก้ task list
+
+## 2026-11-13 คำสั่ง: /implement T-05 specs/006-bandapplication/tasks.md (เรียกซ้ำ)
+
+- ผล: ยังไม่เริ่ม implement เพราะ Q-02 ยังเปิดและคำตอบล่าสุดของทีมคือพัก T-05 จนกว่าจะปิด Q-02
+- ไฟล์ที่แก้/สร้าง: `prompt-log.md` เท่านั้น
+- ผล test: ไม่ได้รัน; ไม่มีการแก้ source code หรือ test
+
+## 2026-11-13 คำสั่ง: แก้สถานะ T-05
+
+- ไฟล์ที่แก้: `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- สิ่งที่แก้: เปลี่ยนสถานะ T-05 จาก “พร้อมทำ” เป็น “รอ Q-02” ตามคำตัดสินของทีม และปรับจำนวน task ที่รอ Open Questions จาก 3 เป็น 4
+- ผล test: ไม่ได้รัน เนื่องจากแก้เอกสารสถานะเท่านั้น
+
+## 2026-11-13 คำสั่ง: /implement T-05 specs/006-bandapplication/tasks.md (หลังปิด Q-02)
+
+- คำตอบทีม: จำกัดเวลาการแสดงรวมไม่เกิน 30 นาที และจำนวนเพลงไม่เกิน 8 เพลง ใช้ค่าเดียวกันทุกอีเว้นต์
+- ไฟล์ที่แก้/สร้าง: `specs/006-bandapplication/spec.md`, `specs/006-bandapplication/tasks.md`, `backend/app/config.py`, `backend/app/auth/application.py`, `backend/app/auth/repository.py`, `backend/tests/test_band_application_validation.py`, `prompt-log.md`
+- สิ่งที่ทำ: บันทึกคำตอบ Q-02 ใน spec; เพิ่ม `POST /applications/validate` ตรวจ session, ข้อมูลวง, เพลงบังคับ, จำนวนเพลง และเวลารวม; ส่งค่าข้อจำกัดเดียวกันในรายการอีเว้นต์และ response validation; เพิ่ม test ขอบเขตค่าที่ยอมรับ/เกิน ข้อมูลไม่ครบ และ session ไม่ถูกต้อง
+- ผล test: `cd backend && /home/codespace/.python/current/bin/python -m pytest -q` → 40 passed; มี StarletteDeprecationWarning เรื่อง `httpx` กับ `starlette.testclient` 1 รายการ; `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่เดาค่าหรือขอบเขตข้อจำกัด ทีมระบุ 30 นาที, 8 เพลง และใช้ค่าเดียวทุกอีเว้นต์ก่อนเริ่ม
+- สถานะ: T-05 เสร็จ รอทีมตรวจ; T-12 พร้อมทำหลัง Q-02 ได้คำตอบ
+- ขอบเขต: ทำเฉพาะ T-05 และบันทึกการตัดสินใจ Q-02; ไม่เริ่ม T-06 หรือ task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-06 specs/006-bandapplication/tasks.md
+
+- คำยืนยันทีม: เพิ่ม `frontend/src/__tests__/BandApplicationPages.test.jsx` ในไฟล์ที่แตะ; ปุ่มส่งเรียก validation เท่านั้นและไม่บันทึก; ไม่เพิ่มปุ่มนำทางไป UC-07
+- ไฟล์ที่แก้: `specs/006-bandapplication/tasks.md`, `frontend/src/pages/BandApplicationPage.jsx`, `frontend/src/api/client.js`, `frontend/src/__tests__/BandApplicationPages.test.jsx`, `prompt-log.md`
+- สิ่งที่ทำ: เชื่อม `POST /applications/validate` ด้วย `sessionId`; แสดงข้อความเมื่อข้อมูลวงหรือข้อมูลใบสมัครไม่ครบ/เกินข้อจำกัด และปิดปุ่มไว้เมื่อข้อมูลวงไม่ครบหรือมี validation errors; ไม่สร้างการบันทึกใบสมัคร
+- ผล test: `cd frontend && npm test -- --run src/__tests__/BandApplicationPages.test.jsx` → 5 passed; `cd frontend && npm run build` → สำเร็จ; `git diff --check` ผ่าน
+- สิ่งที่ต่างจาก mockup: ไม่แสดงปุ่ม “ไปที่ข้อมูลวง” ตามคำยืนยันทีม และไม่แสดงกล่องรอ Q-01/Q-02; ใช้ข้อความ validation จาก API แทนการคัดลอกข้อมูลตัวอย่างใน mockup
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: พฤติกรรมปุ่มส่งและการนำทางไป UC-07 ได้รับการยืนยันจากทีมก่อน implement; การส่งจริงยังไม่ทำตามขอบเขต T-07
+- สถานะ: T-06 เสร็จ รอทีมตรวจ; ไม่เริ่ม T-07
+
+## 2026-11-13 บันทึกเพิ่มเติม T-06
+
+- สิ่งที่แก้เพิ่ม: ปรับข้อความผล validation สำเร็จให้ชัดว่าใบสมัครยังไม่ถูกบันทึก และเพิ่ม test ยืนยันพฤติกรรมนี้; ปรับ test ให้รอข้อมูลวงโหลดเสร็จก่อนกรอกฟอร์ม
+- ผล test ล่าสุด: `cd frontend && npm test -- --run src/__tests__/BandApplicationPages.test.jsx` → 6 passed; `npm run build` ผ่านจากรอบก่อนหน้าโดย source code ไม่เปลี่ยนหลัง build
+
+## 2026-11-13 ผลตรวจสุดท้าย T-06
+
+- สิ่งที่แก้เพิ่ม: ล้าง validation message เก่าเมื่อโหลดข้อมูลวงใหม่ เพื่อไม่ให้ผลตรวจของ session ก่อนหน้าค้างอยู่
+- ผล test/build ล่าสุด: `cd frontend && npm test -- --run src/__tests__/BandApplicationPages.test.jsx` → 6 passed; `cd frontend && npm run build` → สำเร็จ; `git diff --check` ผ่าน
+- Cleanup: คืนไฟล์ `frontend/dist` ที่ build สร้างกลับสู่สถานะเดิม เพื่อไม่ให้ไฟล์นอกขอบเขต task ค้างใน worktree
+
+## คำสั่ง: /implement T-07 specs/006-bandapplication/tasks.md
+
+- คำยืนยันทีม: อนุญาตเพิ่ม `backend/tests/test_band_application_save.py` ในไฟล์ที่แตะของ T-07
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/application.py`, `backend/app/auth/repository.py`, `backend/tests/test_band_application_save.py`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- สิ่งที่ทำ: เพิ่ม `POST /api/applications` ให้ตรวจข้อมูลก่อนบันทึกใบสมัคร; เก็บสำเนาข้อมูลวงและข้อมูลเพลง/การแสดงที่ส่งมา ผูกกับอีเว้นต์ และตอบสถานะ “รอตรวจสอบ”; ไม่เพิ่มกติกาสมัครซ้ำที่ยังเป็น Q-01
+- ผล test: `cd backend && /home/codespace/.python/current/bin/python -m pytest -q` → 44 passed, มี StarletteDeprecationWarning 1 รายการ; `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ขออนุญาตเพิ่มไฟล์ test เพราะไม่ได้อยู่ในรายการไฟล์ T-07 เดิม และคงไม่กำหนดพฤติกรรมใบสมัครซ้ำ
+- ข้อควรทราบ: ใช้ `AuthRepository` ซึ่งเก็บข้อมูลในหน่วยความจำตามรูปแบบปัจจุบันของโค้ด ข้อมูลจึงไม่คงอยู่หลังโปรเซสเริ่มใหม่; ให้ทีมตรวจว่าขอบเขตนี้ตรงกับการเลือกฐานข้อมูลใน plan.md หรือไม่
+- สถานะ: T-07 เสร็จ รอทีมตรวจ
+
+## 2026-11-13 คำสั่ง: /implement T-08 specs/006-bandapplication/tasks.md
+
+- คำยืนยันทีม: ตัดปุ่มไป UC-08 ที่อยู่นอก scope; ให้ result page รับ `sessionId`/`payload` แล้วเรียก API เมื่อเปิด; ใช้ `onRetry` callback และแสดงปุ่มเมื่อมี callback; อนุญาตเพิ่ม test file
+- ไฟล์ที่แก้/สร้าง: `frontend/src/pages/ApplicationResultPage.jsx`, `frontend/src/api/client.js`, `frontend/src/__tests__/ApplicationResultPage.test.jsx`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- สิ่งที่ทำ: เพิ่ม API client สำหรับ `POST /applications`; หน้าผลลัพธ์แสดงข้อความส่งสำเร็จและสถานะ “รอตรวจสอบ” หรือข้อความส่งไม่สำเร็จ; ไม่สร้างปุ่ม “ดูสถานะการสมัคร” เพราะ UC-08 อยู่นอก scope
+- ผล test: `cd frontend && npm test -- --run src/__tests__/ApplicationResultPage.test.jsx src/__tests__/BandApplicationPages.test.jsx` → 9 passed; `cd frontend && npm run build` → สำเร็จ; `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ยืนยันพฤติกรรมปุ่มไป UC-08, วิธีเรียก POST และการย้อนกลับไปฟอร์ม; เพิ่มไฟล์ทดสอบหลังได้รับอนุญาต
+- สิ่งที่ทีมควรตรวจ: ข้อความแจ้งว่าไม่มีใบสมัครที่ไม่สมบูรณ์อาศัยให้ T-10 จัดการการบันทึกล้มเหลวฝั่ง backend ตาม FR-APP-06
+- สถานะ: T-08 เสร็จ รอทีมตรวจ
+
+## 2026-11-13 คำสั่ง: /implement T-09 specs/006-bandapplication/tasks.md
+
+- คำยืนยันทีม: อนุญาตเพิ่ม `backend/tests/test_band_application_rejection.py` ในรายการไฟล์ T-09
+- ไฟล์ที่แก้/สร้าง: `backend/tests/test_band_application_rejection.py`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- สิ่งที่ทำ: ยืนยันว่า `application.py` ตรวจ validation ก่อนบันทึก และ `BandApplicationPage.jsx` แจ้งข้อผิดพลาด/รอให้แก้ไขอยู่แล้ว; เพิ่ม test ที่เรียก `POST /api/applications` เมื่อข้อมูลไม่ครบ, เวลาเกิน limit และจำนวนเพลงเกิน limit พร้อมยืนยันว่าไม่มี application หรือ snapshot ถูกสร้าง; ไม่แก้ source ที่พฤติกรรมตรงตาม FR-APP-03/05 อยู่แล้ว
+- ผล test: backend tests ที่เกี่ยวข้อง → 13 passed, มี StarletteDeprecationWarning 1 รายการ; frontend `BandApplicationPages.test.jsx` → 6 passed; `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ขออนุญาตเพิ่ม test file นอกไฟล์ที่ T-09 ระบุ; ไม่เพิ่มปุ่มนำทางไป UC-07 ตามคำยืนยันเดิม และไม่เพิ่มกติกา Q-01
+- สถานะ: T-09 เสร็จ รอทีมตรวจ
+
+## 2026-11-13 คำสั่ง: /implement T-10 specs/006-bandapplication/tasks.md
+
+- คำยืนยันทีม: อนุญาตเพิ่ม `backend/tests/test_band_application_save_failure.py` ในรายการไฟล์ T-10
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/application.py`, `backend/app/auth/repository.py`, `backend/tests/test_band_application_save_failure.py`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- สิ่งที่ทำ: จัดเก็บใบสมัครพร้อม snapshot เป็น record เดียว; เมื่อ storage เขียน record แล้วล้มเหลว ให้ rollback record และคืนผล `success: false` โดยไม่เลื่อน ID. `ApplicationResultPage.jsx` ไม่แก้ เพราะมี failure state ที่รองรับ response ล้มเหลวอยู่แล้ว
+- ผล test: backend `tests/test_band_application_*.py` → 18 passed, มี StarletteDeprecationWarning 1 รายการ; frontend `ApplicationResultPage.test.jsx` → 3 passed; `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: เพิ่มเฉพาะ backend failure-test ที่ทีมอนุญาต; ไม่เปลี่ยน repository ไปใช้ฐานข้อมูลถาวร เพราะไม่อยู่ในขอบเขต task และข้อจำกัด in-memory ต้องให้ทีมรับทราบ
+- ข้อจำกัด: ข้อมูลใบสมัครยังอยู่ใน in-memory repository และไม่คงอยู่หลังโปรเซสเริ่มใหม่
+- สถานะ: T-10 เสร็จ รอทีมตรวจ
+
+## 2026-11-13 คำสั่ง: ปิด Q-01 เพื่อเตรียมทำ T-11
+
+- คำตอบทีม: อนุญาตให้สมัครอีเว้นต์เดียวกันซ้ำ
+- ไฟล์ที่แก้: `specs/006-bandapplication/spec.md`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- สิ่งที่ทำ: ปิด Q-01 ด้วยคำตอบของทีม ปรับสรุปและจุดตรวจของเฟส 5 และเปลี่ยน T-11 เป็น “พร้อมทำ”
+- สถานะ: ยังไม่ได้เริ่มแก้โค้ด T-11
+
+## 2026-11-13 คำสั่ง: /implement T-11 specs/006-bandapplication/tasks.md
+
+- คำยืนยันทีม: อนุญาตเพิ่ม `backend/tests/test_band_application_duplicates.py` และเพิ่มในรายการไฟล์ที่แตะของ T-11
+- ไฟล์ที่แก้/สร้าง: `backend/tests/test_band_application_duplicates.py`, `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- สิ่งที่ทำ: เพิ่ม regression test ส่งใบสมัครสองครั้งด้วยวงและอีเว้นต์เดิม แล้วยืนยันว่าทั้งสองครั้งสำเร็จและได้ application ID แยกกัน; ไม่แก้ `application.py` หรือ `repository.py` เพราะพฤติกรรมเดิมไม่ปฏิเสธใบสมัครซ้ำและบันทึกใบสมัครใหม่ด้วย ID ใหม่อยู่แล้ว
+- ผล test: `test_T_11_allows_repeated_application_for_same_event` → 1 passed; backend `tests/test_band_application_*.py` → 19 passed, มี StarletteDeprecationWarning 1 รายการ; `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: Q-01 ระบุเพียงว่าอนุญาตสมัครซ้ำ จึงไม่เพิ่มเพดานจำนวนหรือเงื่อนไขตามสถานะ; ขออนุญาตเพิ่ม test file เพราะเดิมไม่มีในช่องไฟล์ที่แตะ
+- สถานะ: T-11 เสร็จ รอทีมตรวจ
+
+## 2026-11-13 คำสั่ง: /implement T-12 specs/006-bandapplication/tasks.md
+
+- ไฟล์ที่แก้: `specs/006-bandapplication/tasks.md`, `prompt-log.md`
+- สิ่งที่ทำ: ตรวจพบว่าเงื่อนไข T-12 มีอยู่แล้วจาก T-05: `backend/app/config.py` กำหนด 30 นาทีและ 8 เพลง, repository ใช้ค่าเดียวกันกับอีเว้นต์ตัวอย่างทุกอีเว้นต์, backend validation ตรวจทั้งสองข้อจำกัด และหน้าฟอร์มแสดงข้อผิดพลาดจาก API; จึงไม่แก้โค้ดหรือ mockup เพิ่ม
+- ผล test: `test_AC_APP_04_accepts_applications_at_configured_limits`, `test_AC_APP_04_rejects_applications_over_duration_or_song_limits` และ tests ใน `test_band_application_seed.py` รวม backend 10 passed; `BandApplicationPages.test.jsx` 6 passed; `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มีการเพิ่มการแสดงตัวเลขใน UI เพราะ spec ไม่มี UI section ที่กำหนดให้แสดงค่า limit; ไม่คัดลอกกล่อง “รอ Q-02” ใน mockup ซึ่งขัดกับคำตอบ Q-02 ที่ปิดแล้ว
+- เหตุผลที่ไฟล์ที่แตะต่างจาก task: `backend/app/config.py`, `backend/app/auth/application.py` และ `frontend/src/pages/BandApplicationPage.jsx` ไม่ต้องแก้ เพราะมีพฤติกรรมตาม T-12 อยู่แล้ว; แก้เฉพาะสถานะและบันทึกผล
+- สถานะ: T-12 เสร็จ รอทีมตรวจ
+
+## 2026-11-13 คำสั่ง: /implement T-13 specs/006-bandapplication/tasks.md
+
+- คำตอบทีมสำหรับ Q-03: ต้องยืนยันตัวตนก่อนเข้าถึง snapshot; รองรับ 20 วงพร้อมกัน; เวลาตอบสนองไม่เกิน 2 วินาทีที่ P95
+- ไฟล์ที่แก้/สร้าง: `specs/006-bandapplication/spec.md`, `specs/006-bandapplication/plan.md`, `specs/006-bandapplication/tasks.md`, `backend/app/config.py`, `backend/app/auth/application.py`, `backend/tests/test_auth_performance.py`, `prompt-log.md`
+- สิ่งที่ทำ: ปิด Q-03 และอัปเดต spec/plan/tasks; เพิ่มค่าเป้าหมายเฉพาะฟีเจอร์ใน config; บังคับใช้ session ก่อนเรียก API ข้อมูลวงที่ใช้สร้าง snapshot (ไม่รับ `user_id` แทน session); เพิ่ม test การปฏิเสธคำขอไม่มี session และ test ส่งใบสมัครพร้อมกันตามเป้าหมาย
+- ผล test: tests `test_auth_performance.py` และ `test_band_application_*.py` → 23 passed, มี StarletteDeprecationWarning 1 รายการ; `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ขอและได้รับคำตอบทีมสำหรับมาตรการ authentication, จำนวนวงพร้อมกัน และค่า P95; ไม่เพิ่มเงื่อนไขการเข้าถึงอื่นนอกเหนือจากที่ทีมกำหนด
+- สถานะ: T-13 เสร็จ รอทีมตรวจ
+
+## 2026-11-13 คำสั่ง: /testcases AC-APP-01 specs/006-bandapplication/
+
+- โหมด: ร่าง (ยังไม่มี `test-cases.md` และไม่มีแถวที่ทีมตรวจเป็น "ใช้ได้")
+- ไฟล์ที่สร้าง: `specs/006-bandapplication/test-cases.md`
+- TC ID ที่เสนอ: TC-APP-01-1 ถึง TC-APP-01-7 (7 แถว สถานะร่าง); ยังไม่เขียนหรือรันโค้ด test
+- ผลตรวจ task: T-03, T-04, T-07 และ T-08 ซึ่งเกี่ยวข้องกับ AC-APP-01 มีสถานะเสร็จ
+- ประเด็นให้ทีมกำหนด: ผลเมื่อส่งใบสมัครโดยไม่มี session นอกเหนือจากการห้ามเข้าถึง snapshot และผลเมื่อส่งไปยังอีเว้นต์ที่ปิดรับสมัคร
+
+## 2026-11-13 คำสั่ง: ทำตามข้อเสนอ /testcases AC-APP-01
+
+- คำตอบทีม: เมื่อไม่มี session ต้องไม่เข้าถึง snapshot และไม่สร้างใบสมัคร; เมื่ออีเว้นต์ปิดรับสมัครให้ปฏิเสธและไม่บันทึก; อนุมัติกรณีที่ระบุชัดให้เขียนและรัน test
+- ไฟล์ที่แก้/สร้าง: `specs/006-bandapplication/test-cases.md`, `backend/tests/test_AC_APP_01.py`, `frontend/src/__tests__/TC-APP-01-5.test.jsx`, `frontend/src/__tests__/TC-APP-01-6.test.jsx`, `frontend/src/__tests__/TC-APP-01-7.test.jsx`, `prompt-log.md`
+- TC ID ที่เขียน: TC-APP-01-1 ถึง TC-APP-01-7; เพิ่ม pytest 7 tests และ vitest 3 tests ตามแถวที่ต้องตรวจ UI
+- ผล test: backend ทั้งชุด 58 passed, StarletteDeprecationWarning 1 รายการ; frontend ทั้งชุด 24 passed / 3 failed (auth-performance 2 รายการ และ setup 1 รายการ); เฉพาะ UI test ใหม่ 3 passed
+- ข้อจำกัดของผลทดสอบ: ความล้มเหลว frontend อยู่ใน `auth-performance.test.jsx` (timeout และ selector พบอีเมลซ้ำ) กับ `setup.test.jsx` (หา "ระบบจองคิวตรวจสุขภาพ" ไม่พบ) ไม่ได้เกิดใน test files ที่เพิ่มรอบนี้
+
+## 2026-11-13 คำสั่ง: /testcases AC-APP-02 specs/006-bandapplication/
+
+- โหมด: ร่าง (AC-APP-02 ยังไม่มีแถวใน `test-cases.md`)
+- ไฟล์ที่แก้: `specs/006-bandapplication/test-cases.md`
+- TC ID ที่เสนอ: TC-APP-02-1 ถึง TC-APP-02-3 (3 แถว สถานะร่าง); ยังไม่เขียนหรือรันโค้ด test
+- ผลตรวจ task: T-03, T-04, T-07, T-08 ซึ่งเกี่ยวข้องกับ AC-APP-02 มีสถานะเสร็จ
+- ประambiguity ที่บันทึก: FR-APP-06/AC-APP-05 กำหนดว่าไม่มีใบสมัครไม่สมบูรณ์เมื่อบันทึกล้มเหลว แต่ spec ไม่ได้ระบุว่าต้องไม่มี snapshot ที่ไม่มีใบสมัครหรือไม่ จึงไม่กำหนดผลทดสอบส่วนนั้น
+
+## 2026-11-13 คำสั่ง: /testcases AC-APP-03 specs/006-bandapplication/
+
+- โหมด: ร่าง (AC-APP-03 ยังไม่มีแถวใน `test-cases.md`)
+- ไฟล์ที่แก้: `specs/006-bandapplication/test-cases.md`
+- TC ID ที่เสนอ: TC-APP-03-1 ถึง TC-APP-03-3 (3 แถว สถานะร่าง); ยังไม่เขียนหรือรันโค้ด test
+- ผลตรวจ task: T-07 และ T-08 ซึ่งเกี่ยวข้องกับ AC-APP-03 มีสถานะเสร็จ
+- ขอบเขต: กรณีทางผิดอ้าง FR-APP-06, AC-APP-05 และ ASM-06 เพื่อทดสอบผลบันทึกล้มเหลว; ไม่พบผลลัพธ์ของ AC-APP-03 ที่ spec ยังไม่ได้กำหนด
+
+## 2026-11-13 คำสั่ง: /testcases AC-APP-04 specs/006-bandapplication/
+
+- โหมด: ร่าง (AC-APP-04 ยังไม่มีแถวใน `test-cases.md`)
+- ไฟล์ที่แก้: `specs/006-bandapplication/test-cases.md`
+- TC ID ที่เสนอ: TC-APP-04-1 ถึง TC-APP-04-4 (4 แถว สถานะร่าง); ยังไม่เขียนหรือรันโค้ด test
+- ผลตรวจ task: T-05, T-06 และ T-09 ซึ่งเกี่ยวข้องกับ AC-APP-04 มีสถานะเสร็จ
+- ขอบเขต: spec ไม่กำหนดข้อความ validation แบบตรงตัว จึงไม่ระบุข้อความใน Then; กรณีทางผิดที่ข้อมูลครบและไม่เกินข้อจำกัดใช้ AC-APP-01/FR-APP-04 ตรวจว่าไม่ปฏิเสธข้อมูลที่ถูกต้อง
+
+## 2026-11-13 คำสั่ง: /testcases AC-APP-05 specs/006-bandapplication/
+
+- โหมด: ร่าง (AC-APP-05 ยังไม่มีแถวใน `test-cases.md`)
+- ไฟล์ที่แก้: `specs/006-bandapplication/test-cases.md`
+- TC ID ที่เสนอ: TC-APP-05-1 ถึง TC-APP-05-3 (3 แถว สถานะร่าง); ยังไม่เขียนหรือรันโค้ด test
+- ผลตรวจ task: T-08 และ T-10 ซึ่งเกี่ยวข้องกับ AC-APP-05 มีสถานะเสร็จ
+- ขอบเขต: spec ระบุให้แจ้งว่าส่งไม่สำเร็จ แต่ไม่ได้กำหนดข้อความบนหน้าจอแบบตรงตัว จึงไม่ตรวจข้อความเฉพาะ; ไม่ตรวจ snapshot ที่อาจแยกจากใบสมัคร เพราะ AC-APP-05 ระบุเฉพาะว่าไม่มีใบสมัครที่ไม่สมบูรณ์
+
+## 2026-11-13 คำสั่ง: /verify specs/006-bandapplication/
+
+- ผล test: backend 58 passed, 0 failed (Starlette deprecation warning 1 รายการ); frontend 26 passed, 1 failed จาก 27 tests (`setup.test.jsx` คาดหวังข้อความของหน้าจอคนละฟีเจอร์)
+- RTM: เพิ่ม `specs/006-bandapplication/rtm.md`; ตารางไปข้างหน้า 9 แถว: ครบ 1, ยังไม่ถึง 0, รอ Q 0, ช่องโหว่ 8
+- ข้อค้นพบใหม่: F-01 ถึง F-08 (การเชื่อมต่อ UI, session ของรายการอีเว้นต์, การเปิดอีเว้นต์เดิม, การตรวจข้อมูลสมาชิก, seed ตัวอย่าง, test snapshot, mockup เกิน spec และทางแก้โปรไฟล์ไม่ครบ)
+- ไม่แก้โค้ด, test, spec, plan หรือ tasks; แก้เฉพาะ RTM และเพิ่มบันทึกนี้

@@ -32,6 +32,36 @@ export const api = {
     })
   },
 
+  // รองรับ FR-APP-01 และ PRE-APP-01: อ่านเฉพาะอีเว้นต์เปิดรับสมัครด้วย session ของวง
+  async getOpenApplicationEvents({ sessionId }) {
+    const q = new URLSearchParams({ session_id: sessionId })
+    return requestJson(`${BASE}/events/open?${q}`)
+  },
+
+  // รองรับ FR-APP-02 และ PRE-APP-01: อ่านข้อมูลวงสำหรับฟอร์มโดยไม่ส่งข้อมูลแก้ไขกลับไปยังโปรไฟล์
+  async getBandApplicationProfile({ sessionId }) {
+    const q = new URLSearchParams({ session_id: sessionId })
+    return requestJson(`${BASE}/bands/me/application-profile?${q}`)
+  },
+
+  // รองรับ FR-APP-03, FR-APP-05 และ PRE-APP-01: ตรวจข้อมูลใบสมัครด้วย session โดยยังไม่บันทึกใบสมัคร
+  async validateBandApplication({ sessionId, payload }) {
+    const q = new URLSearchParams({ session_id: sessionId })
+    return requestJson(`${BASE}/applications/validate?${q}`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
+  },
+
+  // รองรับ FR-APP-04, FR-APP-06 และ PRE-APP-01: ส่งใบสมัครด้วย session ของวง
+  async createBandApplication({ sessionId, payload }) {
+    const q = new URLSearchParams({ session_id: sessionId })
+    return requestJson(`${BASE}/applications?${q}`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
+  },
+
   async registerEvent({ user_id, userId, event_id, eventId, confirmation_snapshot, confirmationSnapshot }) {
     return requestJson(`${BASE}/registration/register`, {
       method: 'POST',
