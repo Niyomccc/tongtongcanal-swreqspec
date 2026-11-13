@@ -101,6 +101,53 @@ class Event(AuthBase):
     updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class BandSnapshot(AuthBase):
+    """สำเนาข้อมูลวงที่ใช้กับใบสมัครตาม FR-APP-02, FR-APP-04 และ NFR-SEC-01"""
+
+    __tablename__ = "band_application_snapshots"
+
+    snapshot_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    band_id: Mapped[int] = mapped_column(ForeignKey("auth_band_profiles.user_id"), nullable=False, index=True)
+    band_name: Mapped[str] = mapped_column(Text, nullable=False)
+    genre: Mapped[str | None] = mapped_column(Text)
+    members: Mapped[str | None] = mapped_column(Text)
+    contact_name: Mapped[str | None] = mapped_column(Text)
+    contact_phone: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class PerformanceSong(AuthBase):
+    """ข้อมูลเพลงในใบสมัครตาม FR-APP-02 และ FR-APP-03"""
+
+    __tablename__ = "band_performance_songs"
+
+    song_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    application_id: Mapped[int] = mapped_column(ForeignKey("band_applications.application_id"), nullable=False, index=True)
+    song_name: Mapped[str] = mapped_column(Text, nullable=False)
+    song_type: Mapped[str] = mapped_column(String, nullable=False)
+    original_artist: Mapped[str | None] = mapped_column(Text)
+    duration_minutes: Mapped[int | None] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class BandApplication(AuthBase):
+    """ใบสมัครต่ออีเว้นต์สำหรับวงดนตรีตาม FR-APP-01 ถึง FR-APP-06 และ ASM-03"""
+
+    __tablename__ = "band_applications"
+
+    application_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    event_id: Mapped[str] = mapped_column(
+        ForeignKey("registration_events.event_id"), nullable=False, index=True
+    )
+    band_id: Mapped[int] = mapped_column(ForeignKey("auth_band_profiles.user_id"), nullable=False, index=True)
+    snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("band_application_snapshots.snapshot_id"))
+    application_status: Mapped[str] = mapped_column(String, nullable=False, default="รอตรวจสอบ")
+    total_duration_minutes: Mapped[int | None] = mapped_column(Integer)
+    notes: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class Registration(AuthBase):
     """ข้อมูล user_id, event_id และ snapshot ที่ผู้ใช้ยืนยันตาม FR-REG-02, NFR-DAT-01 และ Q-02"""
 

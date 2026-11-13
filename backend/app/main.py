@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.auth.application import router as application_router
 from app.auth.login import router as login_router
 from app.auth.register import router as register_router
 from app.auth.routes import router as auth_routes
@@ -22,5 +23,6 @@ def app_root() -> dict[str, str]:
 app.include_router(register_router)
 app.include_router(login_router)
 app.include_router(auth_routes)
+app.include_router(application_router)
 app.include_router(event_detail_router)
 app.include_router(schedule_view_router)
