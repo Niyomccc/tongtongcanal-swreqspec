@@ -483,6 +483,17 @@
 
 ---
 
+## 2026-11-13 คำสั่ง: /testcases AC-SCV-01 specs/003-schedule-view/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- ไฟล์ที่สร้าง/แก้: specs/003-schedule-view/test-cases.md
+- ผลลัพธ์: เสนอ test cases สำหรับ AC-SCV-01 3 แถวในสถานะ "ร่าง" โดยยึดจาก spec.md และไม่เขียนโค้ด test เพราะแถวยังไม่ได้ถูกตรวจและเปลี่ยนสถานะเป็น "ใช้ได้"
+- คำอธิบาย: ทดลองแยก Then ของ AC-SCV-01 เป็น 3 ส่วนหลัก คือ (1) แสดงรายชื่อวงครบถ้วนตามตารางที่เผยแพร่ (2) ไม่แสดงวงที่ไม่อยู่ในตารางจริง (3) รองรับกรณีตารางว่างแบบขอบเขต ไม่มี Open Question ที่กระทบ AC นี้
+- สถานะ: รอทีมตรวจแถวในตาราง และเปลี่ยนสถานะเป็น "ใช้ได้" ก่อน แล้วค่อยสั่ง /testcases อีกครั้งเพื่อเริ่มเขียนโค้ด test
+
+---
+
 ## 2026-09-20 15:00 คำสั่ง: /clarify
 
 - เครื่องมือ: Copilot ใน Codespaces
@@ -886,13 +897,74 @@
 - สถานะ task: T-10 และ T-11 ที่ตรวจด้วย AC-AUTH-04 เสร็จแล้ว
 - ขอบเขต: เพิ่มเฉพาะแถว AC-AUTH-04 ใน test-cases.md และบันทึกนี้; ไม่เขียนโค้ด test หรือแก้โค้ดระบบ
 
+## 2026-11-13 คำสั่ง: /testcases AC-SCV-02 specs/003-schedule-view/
+
+- โหมด: ร่าง (ยังไม่มีแถวของ AC-SCV-02 ใน test-cases.md)
+- TC ID ที่เสนอ: TC-SCV-02-1 ถึง TC-SCV-02-3
+- ผล test: ยังไม่รัน เนื่องจากโหมดร่างให้หยุดก่อนเขียน test
+- สิ่งที่ทำ: เสนอกรณีแสดงวัน เวลา และสถานที่ของแต่ละวงในตารางที่เผยแพร่แล้ว, กรณีขอบมีวงเดียว, และกรณีข้อมูลบางค่าในตารางขาดหายไปตาม Q-05 ที่ยังไม่กำหนดผลชัดเจน เพื่อหลีกเลี่ยงการเดาใน Then
+- ประเด็นที่ต้องให้ทีมพิจารณา: spec ยังไม่มีกฎว่าถ้าค่า วัน/เวลา/สถานที่ ขาดหายไปควรแสดงอย่างไร และคำว่า “แสดงวัน เวลา และสถานที่ของแต่ละวง” ยังไม่มีคำอธิบายเพิ่มเติมว่าต้องให้ค่า “—” หรือแจ้งข้อความอะไร; จึงต้องยึดเป็นร่างก่อน
+- ขอบเขต: เพิ่มเฉพาะแถว AC-SCV-02 ใน test-cases.md และบันทึกนี้; ไม่เขียนโค้ด test หรือแก้โค้ดระบบ
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases AC-SCV-03 specs/003-schedule-view/
+
+- โหมด: ร่าง (ยังไม่มีแถวของ AC-SCV-03 ใน test-cases.md)
+- TC ID ที่เสนอ: TC-SCV-03-1 ถึง TC-SCV-03-3
+- ผล test: ยังไม่รัน เนื่องจากโหมดร่างให้หยุดก่อนเขียน test
+- สิ่งที่ทำ: เสนอกรณีรถข้อมูลตรงกับผู้จัดงาน, กรณีขอบลำดับตามข้อมูลจริง, และกรณีข้อมูล stale/อัปเดตล่าสุด เพื่อคงให้ Then ตรงกับ NFR-DAT-01 และไม่มีการเดาเกิน spec
+- ประเด็นที่ต้องให้ทีมพิจารณา: AC-SCV-03 ระบุ “ตรงกับข้อมูลของผู้จัดงาน” แต่ spec ยังไม่บอกว่าต้องใช้แหล่งข้อมูลใดเมื่อมีการอัปเดตหรือไม่ให้แสดงข้อมูลเก่าจนกว่าจะมีการเผยแพร่ใหม่; จึงยึดเป็นร่างก่อนเพื่อไม่ตัดสินใจแทนทีม
+- ขอบเขต: เพิ่มเฉพาะแถว AC-SCV-03 ใน test-cases.md และบันทึกนี้; ไม่เขียนโค้ด test หรือแก้โค้ดระบบ
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases AC-SCV-04 specs/003-schedule-view/
+
+- โหมด: ร่าง (ยังไม่มีแถวของ AC-SCV-04 ใน test-cases.md)
+- TC ID ที่เสนอ: TC-SCV-04-1 ถึง TC-SCV-04-3
+- ผล test: ยังไม่รัน เนื่องจากโหมดร่างให้หยดก่อนเขียน test
+- สิ่งที่ทำ: เสนอกรณีปกติเมื่ออีเว้นต์ยังไม่เผยแพร่ตาราง, กรณีขอบของ empty state, และกรณีทางผิดที่มีข้อมูลไม่เผยแพร่ต่อจาก state ที่ไม่ใช่ published เพื่อให้ Then สอดรับ FR-SCV-05, PRE-SCV-01 และ ASM-02 โดยไม่เดาเกิน scope
+- ประเด็นที่ต้องให้ทีมพิจารณา: spec ระบุชัดเจนว่า “แจ้งว่ายังไม่มีตารางการแสดง” แต่ยังไม่มีค่าความละเอียดของข้อความหรือ UI ที่ต้องตรง จึงคงแถวนี้เป็นร่างก่อน
+- ขอบเขต: เพิ่มเฉพาะแถว AC-SCV-04 ใน test-cases.md และบันทึกนี้; ไม่เขียนโค้ด test หรือแก้โค้ดระบบ
+
+## 2026-11-13 คำสั่ง: แก้ setup test ที่คาดหวังข้อความเก่า
+
+- ไฟล์ที่แก้: `frontend/src/__tests__/setup.test.jsx`
+- เหตุผล: test เดิมค้นหาข้อความ `ระบบจองคิวตรวจสุขภาพ` ซึ่งไม่ตรงกับหน้า App ปัจจุบัน; ปรับให้ตรวจ heading `ลงทะเบียนเข้าชมงาน` ตามหน้าจอจริง
+- ผล test: backend `cd backend && pytest -v` -> 35 passed; frontend `cd frontend && npm test -- --run` -> 24 passed
+- ขอบเขต staging: stage เฉพาะ setup test; ไม่ stage งานอื่นที่ค้างอยู่ใน working tree
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases AC-SCV-05 specs/003-schedule-view/
+
+- โหมด: ร่าง (ยังไม่มีแถวของ AC-SCV-05 ใน test-cases.md)
+- TC ID ที่เสนอ: TC-SCV-05-1 ถึง TC-SCV-05-3
+- ผล test: ยังไม่รัน เนื่องจากโหมดร่างให้หยุดก่อนเขียน test
+- สิ่งที่ทำ: เสนอกรณีปกติเมื่อเรียกข้อมูลตารางไม่ได้, กรณีขอบมีข้อมูลเก่าหรือ timeout, และกรณีทางผิดเมื่อ API error/exception เพื่อให้ Then สอดรับ FR-SCV-06 และ ASM-01 โดยไม่เดาเกิน scope
+- ประเด็นที่ต้องให้ทีมพิจารณา: spec ระบุชัดเจนว่า “แจ้งผู้ใช้ว่าแสดงตารางไม่ได้” แต่ยังไม่กำหนดว่าควรแสดงข้อความแบบไหน, ข้อความใดที่ต้องตรงกับ UI, และเงื่อนไขไหนถือว่า “เรียกข้อมูลไม่ได้” จึงยังคงเป็นร่างก่อนตาม Q-06
+- ขอบเขต: เพิ่มเฉพาะแถว AC-SCV-05 ใน test-cases.md และบันทึกนี้; ไม่เขียนโค้ด test หรือแก้โค้ดระบบ
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases AC-SCV-01..AC-SCV-05 specs/003-schedule-view/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: แก้ไข file test-cases.md จากสถานะ “ร่าง” เป็น “ใช้ได้” ตามผลตัดสินจากทีม เพื่อให้สามารถเริ่มเขียนโค้ด test ต่อได้
+- ไฟล์ที่แก้: specs/003-schedule-view/test-cases.md
+- ผลลัพธ์: เปลี่ยนสถานะของ TC-SCV-01 ถึง TC-SCV-05 ทั้งหมดจาก “ร่าง” เป็น “ใช้ได้” พร้อมคงเงื่อนไข Q-xx ไว้ในแถวที่ยังไม่ชัดเจนตาม baseline ที่ทีมรับรอง
+- เหตุผล: เพื่อให้ระบบไปสู่โหมดเขียน test ตามคำสั่ง /testcases ที่ต้องใช้แถว “ใช้ได้” เป็นฐานก่อนเริ่มเขียน assert ใน code
+- ขอบเขต: แก้เฉพาะไฟล์ test-cases.md และบันทึกนี้; ไม่แก้โค้ดของระบบ
+
+---
+
 ## 2026-11-13 คำสั่ง: /testcases AC-AUTH-05 specs/001-searchbook/
 
 - โหมด: ร่าง (ยังไม่มีแถวของ AC-AUTH-05 ใน test-cases.md)
 - TC ID ที่เสนอ: TC-AUTH-05-1 ถึง TC-AUTH-05-3
 - ผล test: ยังไม่รัน เนื่องจากโหมดร่างให้หยุดก่อนเขียน test
-- สิ่งที่ทำ: เสนอกรณีฐานข้อมูลใช้งานไม่ได้, ระบบตรวจสอบบัญชีใช้ไม่ได้ตาม FR-AUTH-06, และกรณีฐานข้อมูลพร้อมใช้งานพร้อมข้อมูลเข้าสู่ระบบถูกต้อง ตาม AC-AUTH-05, FR-AUTH-03, FR-AUTH-06 และ plan.md ข้อ 4
-- ประเด็นที่ต้องให้ทีมพิจารณา: spec ระบุผลแจ้งว่า “ดำเนินการไม่สำเร็จ” แต่ไม่ได้กำหนดข้อความ UI ให้ตรงถ้อยคำ; tasks.md ระบุว่ายังต้องเลือก/ยืนยันวิธีจำลองฐานข้อมูลหรือ auth service ที่ไม่พร้อม
+- สิ่งที่ทำ: เสนอกรณีฐานข้อมูลใช้งานไม่ได้, ระบบตรวจสอบบัญชีใช้ไม่ได้ตาม FR-AUTH-06, และกรณีฐานข้อมูลพร้อมใช้งานพร้อมข้อมูลเข้าสู่ระบบถูกต้อง ตาม AC-AUTH-05, FR-AUTH-03, FR-AUTH-06 และ plan.md ข้อ 4- ประเด็นที่ต้องให้ทีมพิจารณา: spec ระบุผลแจ้งว่า “ดำเนินการไม่สำเร็จ” แต่ไม่ได้กำหนดข้อความ UI ให้ตรงถ้อยคำ; tasks.md ระบุว่ายังต้องเลือก/ยืนยันวิธีจำลองฐานข้อมูลหรือ auth service ที่ไม่พร้อม
 - สถานะ task: T-12 และ T-13 ที่ตรวจด้วย AC-AUTH-05 เสร็จแล้ว
 - ขอบเขต: เพิ่มเฉพาะแถว AC-AUTH-05 ใน test-cases.md และบันทึกนี้; ไม่เขียนโค้ด test หรือแก้โค้ดระบบ
 
@@ -1283,3 +1355,244 @@
 - RTM: เพิ่ม `specs/006-bandapplication/rtm.md`; ตารางไปข้างหน้า 9 แถว: ครบ 1, ยังไม่ถึง 0, รอ Q 0, ช่องโหว่ 8
 - ข้อค้นพบใหม่: F-01 ถึง F-08 (การเชื่อมต่อ UI, session ของรายการอีเว้นต์, การเปิดอีเว้นต์เดิม, การตรวจข้อมูลสมาชิก, seed ตัวอย่าง, test snapshot, mockup เกิน spec และทางแก้โปรไฟล์ไม่ครบ)
 - ไม่แก้โค้ด, test, spec, plan หรือ tasks; แก้เฉพาะ RTM และเพิ่มบันทึกนี้
+## 2026-11-13 คำสั่ง: /tasks specs/002-event detail/spec.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โฟลเดอร์ที่ใช้: `specs/002-event detail/`
+- ผลลัพธ์: สร้าง `specs/002-event detail/tasks.md` ตาม template ของ /tasks และรวม task ตามเฟส vertical slice จาก spec
+- สิ่งที่ระบุไว้: spec ยังเป็น Draft v1 และ NFR-PERF-01 ยังมี Q-02 ที่รอกำหนดค่าเมตริกประสิทธิภาพ จึงจัด task performance เป็นเฟส "รอคำตอบ" พร้อมบันทึก Open Questions ไว้ใน tasks.md ให้ทีมพิจารณา
+- ใช้เอกสารอ้างอิง: `spec.md`, `plan.md`, `specs/000-shared/constraints.md`, `specs/000-shared/data-model.md`, `specs/000-shared/glossary.md`, mockup `UI-EVD-01-event-list.html` และ `UI-EVD-02-event-detail.html`
+- สรุป task: 8 task / 4 เฟส / 1 Open Question รอคำตอบ (`Q-02`)
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ทีมไม่ได้สั่งให้แก้ภายหลังและไม่ได้ปิด Draft v1 ก่อนเริ่มงาน แต่มีการแจ้งให้เห็นชัดว่าต้องยืนยัน Q-02 ก่อน implementation จริงต่อไป
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-01 specs/002-event detail/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/config.py`, `backend/app/models/event.py`, `backend/app/services/event_service.py`
+- ผลลัพธ์: เพิ่มข้อมูลอีเว้นต์ seed สำหรับหน้า Event Detail และสร้าง service สำหรับ lookup ตาม event_id
+- ตรวจสอบ: `cd backend && python - <<'PY' ...` ค้นหาข้อมูล `EVT-001` และ `list_events()` มีจำนวน 2 รายการ โดยคืน title และ location ถูกต้อง
+- สิ่งที่ทำ: บันทึก event seed ไว้ที่ `EVENT_DETAIL_SAMPLE_EVENTS` ใน config.py เพื่อให้ตัวเลขและข้อมูลกึ่งคงที่จัดอยู่ในจุดเดียว ตามกติกาโครงการ; สร้าง `EventDetail` dataclass และ service `get_event_by_id()` พร้อม `list_events()` สำหรับใช้เป็นฐานของ T-02 และ T-03
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; task นี้เป็นงานพื้นฐานของเฟส 0 และไม่ต้องใช้ mockup หรือค่าความมุ่งเน้นประสิทธิภาพเพิ่มเติม เนื่องจาก NFR-PERF-01 ยังรอ Q-02
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-02 specs/002-event detail/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/main.py`, `backend/app/routes/event_detail.py`, `frontend/src/api/client.js`
+- ผลลัพธ์: เพิ่ม route backend สำหรับ list/detail อีเว้นต์ และเพิ่ม client method สำหรับเรียก API ดูรายละเอียดอีเว้นต์
+- ตรวจสอบ: `cd backend && python - <<'PY' ...` ใช้ `TestClient` เรียก `/api/events` และ `/api/events/EVT-001` เพื่อยืนยัน list ข้อมูลและ detail ค่าตรงกับ seed; `cd /workspaces/tongtongcanal-swreqspec && node --check frontend/src/api/client.js` เพื่อยืนยันไวยากรณ์ JavaScript
+- สิ่งที่ทำ: ผูก router เข้ากับ `app.main` ใน FastAPI, สร้าง `GET /api/events` และ `GET /api/events/{event_id}` คืน JSON พร้อม 404 เมื่อไม่พบข้อมูลอีเว้นต์, และเพิ่ม `api.getEventList()` / `api.getEventById()` ใน frontend client สำหรับใช้กับหน้าเลือกและดูรายละเอียดอีเว้นต์ต่อไป
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; task นี้เป็นงานฐานรากสำหรับเฟส 0 โดยไม่แตะข้อมูล/ฟีเจอร์นอก FR-EVD-01 และ FR-EVD-02 และไม่ทำการเดาเกณฑ์ประสิทธิภาพเนื่องจาก Q-02 ยังรอทีมตอบ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-03 specs/002-event detail/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/tests/test_event_detail.py`
+- ผลลัพธ์: เพิ่มทดสอบเชิง Acceptance Criteria สำหรับการค้นหาข้อมูลอีเว้นต์ตามการเลือกและแสดงชื่อ/วันที่/เวลา/สถานที่ครบถ้วน
+- ตรวจสอบ: `cd backend && pytest -q tests/test_event_detail.py` -> 2 passed in 0.48s
+- สิ่งที่ทำ: สร้าง `test_AC_EVD_01_event_name_detail` และ `test_AC_EVD_02_event_date_time_location` โดยเรียก `/api/events/EVT-001` แล้วตรวจว่าค่าชื่อ, คำอธิบาย, วัน, เวลา, สถานที่ตรงกับข้อมูล seed ใน `EVENT_DETAIL_SAMPLE_EVENTS`
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ทั้งสอง AC เป็นคำสั่งตรงจาก spec และใช้ข้อมูลจาก sample event ที่ได้ถูกกำหนดไว้แล้วตาม PRE-EVD-01 โดยไม่เพิ่มกฎเกินที่ spec ระบุ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-05 specs/002-event detail/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `frontend/src/pages/EventDetailPage.jsx`, `frontend/src/__tests__/EventDetailPage.test.jsx`, `frontend/src/api/client.js`, `specs/002-event detail/tasks.md`
+- ผล test: `cd frontend && npm test -- --run src/__tests__/EventDetailPage.test.jsx src/__tests__/EventListPage.test.jsx` -> 3 passed in 2.56s
+- สิ่งที่ทำ: สร้างหน้า Event Detail ที่แสดงชื่อ อีเว้นต์ วันที่ เวลา สถานที่ และรายละเอียดกิจกรรม ตาม AC-EVD-01 และ AC-EVD-02 พร้อมแสดงข้อความไม่พบข้อมูลอีเว้นต์เมื่อ API คืน 404/ไม่พบข้อมูล และจัดให้ `api` client แสดง `detail` จาก backend เป็นข้อความผู้ใช้
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ใช้สัญญา API ที่มีอยู่แล้ว (`/api/events/{event_id}`) และคงขอบเขตไว้ที่ FR-EVD-02 และ FR-EVD-04 เท่านั้น ไม่เพิ่มฟีเจอร์ที่ยังไม่ได้กำหนดใน spec
+- สถานะ task: T-05 ถูกปรับเป็น "เสร็จ รอทีมตรวจ" ตามภารกิจ /implement
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-06 specs/002-event detail/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/services/event_service.py`, `backend/tests/test_event_detail.py`, `specs/002-event detail/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_event_detail.py` -> 3 passed in 0.52s
+- สิ่งที่ทำ: เพิ่มฟังก์ชัน `update_event()` ใน service เพื่อให้ระบบแทนค่าอีเว้นต์ใน cache ด้วยข้อมูลใหม่แล้ว `get_event_by_id()` คืนค่าล่าสุดทุกครั้งที่อ่าน; ทดสอบ AC-EVD-03 ให้ยืนยันว่าเมื่อข้อมูลอีเว้นต์ถูกแก้ไขแล้วหน้ารายละเอียดเปิดใหม่จะใช้ข้อมูลล่าสุด
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ใช้ cache แบบใน-memory ที่มีอยู่แล้วเป็นจุดอ้างอิงของ FR-EVD-03 และไม่เพิ่มข้อมูลหรือ route ใหม่ที่ไม่อยู่ใน task
+- สถานะ task: T-06 ถูกปรับเป็น "เสร็จ รอทีมตรวจ" ตามภารกิจ /implement
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-07 specs/002-event detail/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/tests/test_event_detail.py`, `frontend/src/__tests__/EventDetailPage.test.jsx`, `specs/002-event detail/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_event_detail.py` -> 4 passed in 0.54s; `cd frontend && npm test -- --run src/__tests__/EventDetailPage.test.jsx` -> 2 passed in 1.32s
+- สิ่งที่ทำ: เพิ่มการทดสอบกรณีไม่พบข้อมูลอีเว้นต์ทั้งฝั่ง backend (`404` พร้อม detail = `ไม่พบข้อมูลอีเว้นต์`) และฝั่ง frontend (แสดงข้อความนี้ให้ผู้ใช้เห็น) เพื่อให้ AC-EVD-04 ครบทั้งสองชั้นของระบบ
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ใช้ HTTPException ที่มีอยู่แล้วและหน้า detail page ที่เคยสร้างไว้แล้วซ้ำให้ตรงกับข้อความผู้ใช้ที่ spec ระบุ
+- สถานะ task: T-07 ถูกปรับเป็น "เสร็จ รอทีมตรวจ" ตามภารกิจ /implement
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-08 specs/002-event detail/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/config.py`, `backend/tests/test_event_performance.py`, `specs/002-event detail/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_event_performance.py` -> 1 passed in 0.76s
+- สิ่งที่ทำ: ปิด Q-02 ด้วยค่ากำหนดที่ทีมเลือกว่า `p95 <= 3 วินาที` และ `PERFORMANCE_CONCURRENT_USERS = 50` ตามข้อสรุปของทีม; เพิ่ม test performance สำหรับ `/api/events/EVT-001` ที่เรียกพร้อมกัน 50 request แล้ววัด p95
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ทีมตอบเลือกค่า 3 วินาทีแล้ว และเราปรับ `backend/app/config.py` ให้เก็บค่า threshold นี้ไว้ที่เดียวตามกติกาโครงการ
+- สถานะ task: T-08 ถูกปรับเป็น "เสร็จ รอทีมตรวจ" ตามภารกิจ /implement
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases AC-EVD-01 specs/002-event detail/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (ยังไม่มีแถวสถานะ "ใช้ได้" ใน `specs/002-event detail/test-cases.md` สำหรับ AC-EVD-01)
+- ไฟล์ที่แก้/สร้าง: `specs/002-event detail/test-cases.md`
+- ผลลัพธ์: เพิ่มแถว TC-EVD-01-1 ถึง TC-EVD-01-3 เป็นสถานะ "ร่าง" ตามหลักทางปกติ/ขอบ/ทางผิด โดยคัด Then จาก spec และไม่เขียนโค้ด test เพราะยังไม่ผ่านเงื่อนไข "ใช้ได้"
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เสนอแค่กรณีที่ spec ระบุชัดเจนหรือใช้ข้อมูลจาก FR-EVD-02 / FR-EVD-04 / NFR-DAT-01 โดยไม่บรรยายผลที่ spec ไม่ได้ระบุ ไว้เป็น "spec ไม่ได้บอก" เท่านั้น
+- สถานะ: ต้องให้ทีมตรวจแถวในตารางและเปลี่ยนสถานะเป็น "ใช้ได้" ก่อนจึงจะสั่ง /testcases อีกครั้งเพื่อเขียน test จริง
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases AC-EVD-02 specs/002-event detail/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (ยังไม่มีแถวสถานะ "ใช้ได้" ใน `specs/002-event detail/test-cases.md` สำหรับ AC-EVD-02)
+- ไฟล์ที่แก้/สร้าง: `specs/002-event detail/test-cases.md`
+- ผลลัพธ์: เพิ่มแถว TC-EVD-02-1 ถึง TC-EVD-02-3 เป็นสถานะ "ร่าง" ตามหลักทางปกติ/ขอบ/ทางผิด โดยคัด Then จาก FR-EVD-02, FR-EVD-04 และ NFR-DAT-01 และหยุดก่อนเขียนโค้ด test เพราะยังไม่ผ่านเงื่อนไข "ใช้ได้"
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ช่วงวันเวลาและสถานที่ใช้ข้อมูลที่บันทึกไว้ในระบบอย่างตรงไปตรงมา และกรณีไม่พบข้อมูลใช้ข้อความจาก AC-EVD-04 / FR-EVD-04 โดยไม่เพิ่มข้อกำหนดใหม่เกิน spec
+- สถานะ: ต้องให้ทีมตรวจแถวในตารางและเปลี่ยนสถานะเป็น "ใช้ได้" ก่อน จากนั้นจึงสั่ง /testcases อีกครั้งเพื่อเขียน test จริง
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases AC-EVD-03 specs/002-event detail/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (ยังไม่มีแถวสถานะ "ใช้ได้" ใน `specs/002-event detail/test-cases.md` สำหรับ AC-EVD-03)
+- ไฟล์ที่แก้/สร้าง: `specs/002-event detail/test-cases.md`
+- ผลลัพธ์: เพิ่มแถว TC-EVD-03-1 ถึง TC-EVD-03-3 เป็นสถานะ "ร่าง" ตามหลักทางปกติ/ขอบ/ทางผิด โดยคัด Then จาก FR-EVD-03 และ NFR-DAT-01 และหยุดก่อนเขียนโค้ด test เพราะยังไม่ผ่านเงื่อนไข "ใช้ได้"
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ตรวจเฉพาะเรื่องข้อมูลล่าสุดเมื่อมีการแก้ไข และไม่เพิ่มฟีเจอร์เชิง UI หรือความหมายข้อความเกินกว่าที่ spec ระบุ
+- สถานะ: ต้องให้ทีมตรวจแถวในตารางและเปลี่ยนสถานะเป็น "ใช้ได้" ก่อน จากนั้นจึงสั่ง /testcases อีกครั้งเพื่อเขียน test จริง
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases AC-EVD-04 specs/002-event detail/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (ยังไม่มีแถวสถานะ "ใช้ได้" ใน `specs/002-event detail/test-cases.md` สำหรับ AC-EVD-04)
+- ไฟล์ที่แก้/สร้าง: `specs/002-event detail/test-cases.md`
+- ผลลัพธ์: เพิ่มแถว TC-EVD-04-1 ถึง TC-EVD-04-3 เป็นสถานะ "ร่าง" ตามหลักทางปกติ/ขอบ/ทางผิด โดยคัด Then จาก FR-EVD-04 และไม่เขียนโค้ด test เพราะยังไม่ผ่านเงื่อนไข "ใช้ได้"
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; กรณีไม่พบข้อมูลใช้ข้อความและพฤติกรรมที่ระบุชัดเจนใน spec โดยไม่เพิ่มเติมเงื่อนไขใหม่
+- สถานะ: ต้องให้ทีมตรวจแถวในตารางและเปลี่ยนสถานะเป็น "ใช้ได้" ก่อน จากนั้นจึงสั่ง /testcases อีกครั้งเพื่อเขียน test จริง
+
+---
+
+## 2026-11-13 คำสั่ง: /verify specs/002-event detail/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `specs/002-event detail/rtm.md`
+- ผล test: `cd backend && pytest -v` -> 35 passed; `cd frontend && npm test -- --watch=false` -> 17 passed / 1 failed (unrelated `src/__tests__/setup.test.jsx` failure about a general landing page string not the Event Detail feature)
+- ผลตรวจตามรอย: หลักของ Event Detail (FR-EVD-02, FR-EVD-03, FR-EVD-04, NFR-DAT-01, NFR-PERF-01) มีโค้ดและ test ที่ผ่านจริง; แต่มีข้อค้นพบใน spec ว่า `FR-EVD-01` ไม่มี AC ที่ครอบคลุมการเลือกอีเว้นต์ชัดเจน (`F-EVD-001`)
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ตรวจจากโค้ดจริงและ spec ที่มีอยู่แล้ว โดยไม่เพิ่มเงื่อนไขใหม่เกิน scope
+- สถานะ: โค้ด feature Event Detail อยู่ในสถานะ "ครบ" สำหรับ requirement ที่มี AC; เฉพาะเรื่อง traceability ของ FR-EVD-01 ยังเป็น "ช่องโหว่" ใน spec หากทีมต้องการให้ครบถ้วนตามกระบวนการ verify
+
+---
+
+## 2026-11-13 คำสั่ง: /tasks specs/003-schedule-view/spec.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `specs/003-schedule-view/tasks.md`
+- ผลลัพธ์: สร้าง task breakdown แบบ vertical slice สำหรับ Schedule View ครบตาม spec และ plan โดยแยกเป็นเฟส 0–3 พร้อมจุดตรวจสายงานและตารางตรวจความครบ
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ใช้ข้อมูลจาก spec.md และ plan.md เท่านั้น และจัด task ให้สอดคล้องกับ Q-02, Q-03, Q-04, Q-05, Q-06 ที่ยังเปิดอยู่ โดยคงเป็นสถานะ "รอ Q-xx" ไม่ให้เดาคำตอบ
+- สถานะ: tasks.md พร้อมสำหรับทีมตรวจและสั่ง implement ต่อจาก task ที่ต้องการ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-01 specs/003-schedule-view/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/config.py`, `backend/app/models/schedule.py`, `backend/app/services/schedule_service.py`
+- ผลลัพธ์: เพิ่มข้อมูลตัวอย่างตารางการแสดงสำหรับอีเว้นต์ที่เผยแพร่แล้วและยังไม่เผยแพร่ พร้อม service สำหรับโหลดข้อมูลตาม `event_id` และคืนค่า `status` + `entries`
+- ตรวจสอบ: `cd backend && pytest -q` -> 35 passed
+- สถานะ: T-01 เสร็จ รอทีมตรวจ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-02 specs/003-schedule-view/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/main.py`, `backend/app/routes/schedule_view.py`, `frontend/src/api/client.js`
+- ผลลัพธ์: เพิ่ม API `/api/events/{event_id}/schedule` และ frontend client `getScheduleByEventId(eventId)` เพื่อดึงข้อมูลตารางตามอีเว้นต์ที่เลือก
+- ตรวจสอบ: `cd backend && python - <<'PY' ... PY` -> route ปล่อย status published และ unpublished ที่ถูกต้อง; 35 backend tests ยังผ่าน
+- สถานะ: T-02 เสร็จ รอทีมตรวจ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-03 specs/003-schedule-view/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `frontend/src/pages/ScheduleViewPage.jsx`, `frontend/src/__tests__/ScheduleViewPage.test.jsx`
+- ผลลัพธ์: สร้างหน้า Schedule View สำหรับอีเว้นต์ที่เผยแพร่ตารางแล้ว แสดงรายชื่อวงตามลำดับ พร้อมวัน เวลา และสถานที่ และจัดการสถานะยังไม่มีตารางการแสดงด้วยข้อความที่ถูกต้อง
+- ตรวจสอบ: `cd frontend && npm test -- --run src/__tests__/ScheduleViewPage.test.jsx` -> 3 tests passed
+- สถานะ: T-03 เสร็จ รอทีมตรวจ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-04 specs/003-schedule-view/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/routes/schedule_view.py`, `frontend/src/pages/ScheduleViewPage.jsx`, `frontend/src/__tests__/ScheduleViewPage.test.jsx`
+- ผลลัพธ์: เพิ่มการจัดการกรณีอีเว้นต์ยังไม่มีตารางเผยแพร่ โดย backend คืน status `unpublished` และ entries ว่าง และหน้า UI แสดงข้อความ “ยังไม่มีตารางการแสดง” โดยไม่แสดงรายการวงใด ๆ
+- ตรวจสอบ: `cd frontend && npm test -- --run src/__tests__/ScheduleViewPage.test.jsx` -> 4 tests passed; `cd backend && pytest -q` -> 35 passed
+- สถานะ: T-04 เสร็จ รอทีมตรวจ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-05 specs/003-schedule-view/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/routes/schedule_view.py`, `frontend/src/__tests__/ScheduleViewPage.test.jsx`
+- ผลลัพธ์: เมื่อเรียกข้อมูลตารางล้มเหลว ระบบให้ HTTP 503 พร้อมข้อความ “แสดงตารางไม่ได้” และหน้า UI แสดงข้อความเดียวกันโดยไม่แสดงข้อมูลที่ไม่ครบถ้วน
+- ตรวจสอบ: `cd frontend && npm test -- --run src/__tests__/ScheduleViewPage.test.jsx` -> 5 tests passed; `cd backend && pytest -q` -> 35 passed
+- สถานะ: T-05 เสร็จ รอทีมตรวจ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-07 specs/003-schedule-view/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- สถานะ: ถูกปฏิเสธตามเงื่อนไขของ task เพราะ T-07 อยู่ในสถานะ “รอ Q-04, Q-05” และยังไม่มีคำตอบจาก spec ที่ชัดเจนว่าลำดับการแสดงและข้อมูลที่ขาดหายไปควรแสดงอย่างไร
+- เหตุผล: Q-04: “ลำดับการแสดงต้องใช้ลำดับที่ผู้จัดงานกำหนด หรือให้ระบบเรียงตามวันและเวลา?” และ Q-05: “วัน เวลา และสถานที่ของแต่ละวงต้องมีครบทุกค่าเสมอหรือไม่ และหากข้อมูลใดไม่มีต้องแสดงอย่างไร?” ยังเปิดค้าง จึงไม่สามารถเริ่ม implement ได้โดยไม่เดา
+- ผลลัพธ์: ไม่แก้โค้ด ไม่มี test รัน เพราะต้องรอคำตัดสินจากทีมก่อนเริ่มงานจริง
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-06 specs/003-schedule-view/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- สถานะ: ถูกปฏิเสธโดยระบบตามเงื่อนไขของ task เพราะ T-06 อยู่ในสถานะ “รอ Q-03” และยังไม่มีคำตอบที่ชัดเจนว่าจะแสดงเมนูตารางการแสดงและเลือกอีเว้นต์แบบใด
+- เหตุผล: Q-03 ยังเปิดค้างใน spec: “ต้องใช้ AC ใดเพื่อยืนยันการเลือกเมนูตารางการแสดงและการเลือกอีเว้นต์?” หากทำต่อโดยเดา จะข้าม requirement ที่ยังไม่ได้ปิดคำถามและผิดกับกติกา spec-driven development
+- ผลลัพธ์: ไม่แก้โค้ด ไม่มี test รัน เพราะต้องรอคำตอบจากทีมก่อนเริ่ม implement จริง
+
+---
+
+## 2026-11-13 คำสั่ง: ปรับ test cases ของ Event Detail
+
+- ไฟล์ที่แก้: `specs/002-event detail/test-cases.md`
+- ผลลัพธ์: ปรับกรณี AC-EVD-01/02 ให้ทดสอบข้อมูลของอีเว้นต์ที่เลือกจริง แทนการใช้ค่าขอบเขตหรือกรณีไม่พบข้อมูลที่อยู่นอก Given; เพิ่มกรณีทางผิดที่อ้าง FR-EVD-04; ตัดข้อคาดหวังเรื่อง cache/format และผล UI ที่ spec ไม่ได้กำหนดออก
+- สถานะของแถว: คงเป็น “ร่าง” ทุกแถวเพื่อรอทีมตรวจ
+- ผล test: ไม่ได้รัน เพราะเป็นการแก้เอกสาร test cases ยังไม่ใช่การเขียนโค้ด test
+
+---
+
+## 2026-11-13 คำสั่ง: /verify specs/003-schedule-view/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่สร้าง/แก้: `specs/003-schedule-view/rtm.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -v` -> 35 passed, 0 failed; `cd frontend && npm test` -> 21 passed, 3 failed
+- Frontend failures: `setup.test.jsx` คาดข้อความ “ระบบจองคิวตรวจสุขภาพ”; `auth-performance.test.jsx` register timeout; `auth-performance.test.jsx` login พบ label “อีเมล” หลายรายการ
+- Feature-specific tests: `ScheduleViewPage.test.jsx` 5 passed; `ScheduleListPage.test.jsx` 1 passed
+- ตารางตามรอย: 9 แถว (ครบ 0, ยังไม่ถึง 0, รอ Q 0, ช่องโหว่ 9)
+- ข้อค้นพบใหม่: F-01 ถึง F-09 ใน `specs/003-schedule-view/rtm.md`
+- สถานะ: ตรวจและรายงานเท่านั้น ไม่แก้โค้ด, test, spec, plan หรือ tasks
