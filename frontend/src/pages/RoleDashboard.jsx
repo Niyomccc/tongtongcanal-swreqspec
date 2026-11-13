@@ -9,12 +9,40 @@ const ROLE_LABELS = {
   admin: 'ผู้ดูแลระบบ',
 }
 
+const ROLE_PERMISSIONS = {
+  student: ['view_dashboard', 'view_schedule', 'manage_own_profile'],
+  audience: ['view_dashboard', 'view_schedule', 'register_for_event'],
+  band: ['view_dashboard', 'manage_own_band', 'view_own_bookings'],
+  organizer: ['view_dashboard', 'manage_events', 'review_registrations'],
+  admin: ['view_dashboard', 'manage_events', 'manage_users', 'manage_permissions', 'review_registrations'],
+}
+
 const MENU_BY_ROLE = {
-  student: ['ข้อมูลส่วนตัว', 'ตารางงาน', 'ประวัติการใช้บริการ'],
-  audience: ['ค้นหากิจกรรม', 'ตารางกิจกรรม', 'การแจ้งเตือน'],
-  band: ['ข้อมูลวง', 'รายการอีเว้นต์', 'ประวัติการแสดง'],
-  organizer: ['จัดการอีเว้นต์', 'รายงานผู้เข้าร่วม', 'ตั้งค่า'],
-  admin: ['จัดการผู้ใช้', 'ระบบตรวจสอบ', 'รายงาน'],
+  student: [
+    { label: 'ข้อมูลส่วนตัว', permission: 'manage_own_profile' },
+    { label: 'ตารางงาน', permission: 'view_schedule' },
+    { label: 'ประวัติการใช้บริการ', permission: 'view_dashboard' },
+  ],
+  audience: [
+    { label: 'ค้นหากิจกรรม', permission: 'view_dashboard' },
+    { label: 'ตารางกิจกรรม', permission: 'view_schedule' },
+    { label: 'การแจ้งเตือน', permission: 'register_for_event' },
+  ],
+  band: [
+    { label: 'ข้อมูลวง', permission: 'manage_own_band' },
+    { label: 'รายการอีเว้นต์', permission: 'view_own_bookings' },
+    { label: 'ประวัติการแสดง', permission: 'view_dashboard' },
+  ],
+  organizer: [
+    { label: 'จัดการอีเว้นต์', permission: 'manage_events' },
+    { label: 'รายงานผู้เข้าร่วม', permission: 'review_registrations' },
+    { label: 'ตั้งค่า', permission: 'manage_events' },
+  ],
+  admin: [
+    { label: 'จัดการผู้ใช้', permission: 'manage_users' },
+    { label: 'ระบบตรวจสอบ', permission: 'manage_permissions' },
+    { label: 'รายงาน', permission: 'review_registrations' },
+  ],
 }
 
 export function navigateTo(path) {
@@ -24,7 +52,23 @@ export function navigateTo(path) {
 export default function RoleDashboard({ user = {}, onNavigate = navigateTo } = {}) {
   const role = user.role || 'student'
   const roleLabel = ROLE_LABELS[role] || 'ผู้ใช้'
-  const accessibleMenus = useMemo(() => MENU_BY_ROLE[role] || MENU_BY_ROLE.student, [role])
+
+  const permissions = useMemo(() => {
+    const fromUser = Array.isArray(user.permissions) ? user.permissions : []
+    if (fromUser.length > 0) {
+      return new Set(fromUser)
+    }
+
+    return new Set(ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.student)
+  }, [role, user.permissions])
+
+  const accessibleMenus = useMemo(() => {
+    const menuOptions = MENU_BY_ROLE[role] || MENU_BY_ROLE.student
+    return menuOptions.filter((menu) => {
+      if (role === 'admin') return true
+      return permissions.has(menu.permission)
+    })
+  }, [permissions, role])
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-8 text-slate-800">
@@ -53,8 +97,8 @@ export default function RoleDashboard({ user = {}, onNavigate = navigateTo } = {
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {accessibleMenus.map((menu) => (
-            <div key={menu} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-sm font-medium text-slate-600">{menu}</p>
+            <div key={menu.label} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <p className="text-sm font-medium text-slate-600">{menu.label}</p>
             </div>
           ))}
         </div>

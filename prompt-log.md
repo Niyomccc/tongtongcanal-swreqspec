@@ -55,6 +55,21 @@
 - ผล test: `cd frontend && npm test -- --run src/__tests__/LoginPage.test.jsx` -> 1 passed
 - สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้ฟังก์ชัน `api.login` และ `RoleDashboard` ตามสัญญา API ที่มีอยู่แล้วและไม่เพิ่มเส้นทาง/ฟีเจอร์ใหม่เกิน requirement ของ AC-AUTH-02
 
+## 2026-11-13 คำสั่ง: /implement T-13
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: frontend/src/pages/LoginPage.jsx, frontend/src/__tests__/LoginUnavailable.test.jsx, specs/001-searchbook/tasks.md
+- ผล test: `cd frontend && npm test -- --run src/__tests__/AuthValidation.test.jsx src/__tests__/LoginUnavailable.test.jsx` -> 3 passed in 3.09s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; กรณี auth service ไม่พร้อมและกรณีข้อมูลเข้าสู่ระบบผิดถูกแยกแยะไว้ตามข้อความตอบกลับจาก backend โดยไม่แปลงทุกกรณีให้เป็นข้อความเดียวกัน และหน้า login จะยังคงไม่แสดง success state เมื่อ backend ใช้งานไม่ได้ต่ถามแทน: ไม่มี; เราใช้ฟังก์ชัน `api.login` และ `RoleDashboard` ตามสัญญา API ที่มีอยู่แล้วและไม่เพิ่มเส้นทาง/ฟีเจอร์ใหม่เกิน requirement ของ AC-AUTH-02
+---
+
+## 2026-11-13 คำสั่ง: /implement T-08
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: specs/001-searchbook/tasks.md, backend/app/auth/validation.py, backend/app/auth/register.py, backend/app/auth/login.py, backend/tests/test_auth_validation.py
+- ผล test: `cd backend && pytest -q` -> 6 passed in 1.27s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; validation เพิ่มเป็น layer ที่ตรวจข้อมูลสมัคร/เข้าสู่ระบบแบบ generic ตาม spec โดยไม่เปิดเผยข้อมูลที่ผิดว่าผิดตรงไหน และใช้ `PASSWORD_MIN_LENGTH` จาก config เดิมเพื่อหลีกเลี่ยงการฝังตัวเลข
+
 ---
 
 ## 2026-09-20 คำสั่ง: /clarify
@@ -545,3 +560,66 @@
 - ผลตรวจ: `test_AUTH_models_and_config` ผ่าน; `test_AUTH_app_startup` ผ่าน; `cd frontend && npm test` ผ่าน 1 test; `cd frontend && npm run build` ผ่าน
 - สิ่งที่ยังไม่กำหนด: ไม่ได้เพิ่มเงื่อนไขรหัสผ่านนอกขั้นต่ำ 8 ตัวอักษร เพราะนโยบายหน่วยงานยังไม่ระบุ; ไม่ได้เลือกฐานข้อมูลหรือ session/JWT ซึ่ง plan.md ยังไม่ได้กำหนด
 - ขอบเขต: สร้างโมเดล Auth และค่ากฎจากข้อกำหนดเท่านั้น; ไม่ได้เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-10 specs/001-searchbook/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/permissions.py`, `backend/app/auth/routes.py`, `backend/app/main.py`, `backend/tests/test_auth_permissions.py`, `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -q tests/test_auth_permissions.py tests/test_auth_login.py tests/test_auth_security.py tests/test_auth_registration.py tests/test_auth_validation.py` → 7 passed in 1.31s
+- สิ่งที่ทำ: เพิ่มการตรวจสิทธิ์แบบ role-based ที่ยึด FR-AUTH-05, รวมทั้ง endpoint `/api/auth/permissions/check` และ `/api/auth/me` สำหรับตรวจ/คืน permissions, พร้อมป้องกันไม่ให้ผู้ใช้ที่ไม่มีสิทธิ์เรียกฟังก์ชันหรือการกระทำที่ไม่ได้รับอนุญาต
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ระดับสิทธิ์ของแต่ละบทบาทไม่ได้ระบุรายละเอียดเฉพาะใน spec จึงกำหนดเป็นชุด permission แบบพื้นฐานที่ชัดเจนเพื่อให้ backend ตรวจสิทธิ์ได้จริงตามขอบเขตของ AC-AUTH-04 โดยไม่เพิ่มฟังก์ชันนอก scope
+- ขอบเขต: ทำเฉพาะ T-10 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-11 specs/001-searchbook/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `frontend/src/pages/RoleDashboard.jsx`, `frontend/src/api/client.js`, `frontend/src/__tests__/RoleDashboard.test.jsx`, `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผล test: `cd frontend && npm test -- --run src/__tests__/LoginPage.test.jsx src/__tests__/RegisterPage.test.jsx src/__tests__/RoleDashboard.test.jsx src/__tests__/AuthValidation.test.jsx` → 5 tests passed
+- สิ่งที่ทำ: ปรับ dashboard ให้แสดงเฉพาะเมนูที่ผู้ใช้มีสิทธิ์จาก role/permissions เช่น นักศึกษาเห็นเมนูที่เกี่ยวข้องกับตนเอง ขณะที่ admin เห็นเมนูการจัดการ; เพิ่ม API client method `getCurrentUser` สำหรับโหลดข้อมูลผู้ใช้/permission; คงสิทธิ์ที่มีอยู่จาก backend เป็น source of truth และไม่แสดงเมนูที่ไม่ได้รับอนุญาต
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ใช้ permission set ที่สอดคล้องกับ T-10 และคงให้ frontend แสดงตามสิทธิ์จริงโดยไม่ไล่เพิ่มฟังก์ชันนอก scope
+- ขอบเขต: ทำเฉพาะ T-11 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-12 specs/001-searchbook/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/login.py`, `backend/tests/test_auth_unavailable.py`, `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -q tests/test_auth_unavailable.py tests/test_auth_login.py tests/test_auth_security.py tests/test_auth_registration.py tests/test_auth_validation.py tests/test_auth_permissions.py` → 8 passed in 1.30s
+- สิ่งที่ทำ: ป้องกัน login เมื่อ repository/auth service เกิด exception โดยจับ exception แบบ generic แล้ว raise `ValueError("อีเมลหรือรหัสผ่านไม่ถูกต้อง")` เพื่อปฏิเสธการเข้าสู่ระบบโดยไม่สร้าง session และไม่เปิดเผยรายละเอียดของ backend error
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ใช้ข้อความ generic ที่มีอยู่ใน config และยึดเงื่อนไข FR-AUTH-06 / NFR-SEC-01 โดยไม่เพิ่มกติกานอก scope
+- ขอบเขต: ทำเฉพาะ T-12 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-09 specs/001-searchbook/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `frontend/src/pages/RegisterPage.jsx`, `frontend/src/pages/LoginPage.jsx`, `frontend/src/__tests__/AuthValidation.test.jsx`, `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผล test: `cd frontend && npm test -- --run src/__tests__/LoginPage.test.jsx src/__tests__/RegisterPage.test.jsx src/__tests__/AuthValidation.test.jsx` → 4 tests passed
+- สิ่งที่ทำ: แสดงข้อผิดพลาดแบบฟอร์มบนหน้า register/login, คงข้อมูลที่ผู้ใช้กรอกไว้เมื่อ validation ล้ม, จัดการข้อผิดพลาดจาก API ให้สอดคล้องกันและไม่เปิดเผยว่าผิดที่อีเมลหรือรหัสผ่าน, รวมถึง map ข้อผิดพลาด backend `fullNameOrBandName` ให้ตรงกับฟิลด์ `fullName` บน UI
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ใช้ข้อความและพฤติกรรมที่ระบุใน AC-AUTH-03 และ NFR-SEC-01 โดยไม่เพิ่มนโยบายใหม่หรือเปิดเผยคำอธิบายว่าผิดตัวใดตัวหนึ่ง
+- ขอบเขต: ทำเฉพาะ T-09 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-14 specs/001-searchbook/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/tests/test_auth_performance.py`, `frontend/src/__tests__/auth-performance.test.jsx`, `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -q tests/test_auth_performance.py` → 1 passed in 3.14s; `cd frontend && npm test -- --run src/__tests__/auth-performance.test.jsx` → 1 passed in 3.84s
+- สิ่งที่ทำ: เพิ่ม performance regression สำหรับกรณีสมัครสมาชิกด้วยโหลด 50 คน โดยวัด p95 ของเวลา response ตาม NFR-PERF-01 และยืนยันว่าตรงตามเกณฑ์ไม่เกิน 3 วินาที สำหรับ backend ใช้ concurrent registration and barrier เพื่อจำลองผู้ใช้พร้อมกัน ส่วน frontend ใช้การ render + submit แบบวน 50 ครั้ง เพื่อยืนยันหน้าจอไม่ช้าเกินกว่าขีดจำกัด
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้ p95 ตาม NFR-PERF-01 อย่างตรงตาม spec และไม่กำหนดค่าใหม่หรือเงื่อนไขเพิ่มเติม โดยคง task เฉพาะ T-14 ตามที่ task list ระบุเท่านั้น
+- ขอบเขต: ทำเฉพาะ T-14 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-15 specs/001-searchbook/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/tests/test_auth_performance.py`, `frontend/src/__tests__/auth-performance.test.jsx`, `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -q tests/test_auth_performance.py` → 2 passed in 9.61s; `cd frontend && npm test -- --run src/__tests__/auth-performance.test.jsx` → 2 passed in 4.82s
+- สิ่งที่ทำ: เพิ่ม performance regression สำหรับกรณีเข้าสู่ระบบด้วยโหลด 50 คน โดยวัด p95 ของเวลา response ตาม NFR-PERF-01 และยืนยันว่าตรงตามเกณฑ์ไม่เกิน 3 วินาที สำหรับ backend ใช้ความพร้อมของผู้ใช้ 50 รายการและ concurrent login via barrier เพื่อจำลองการเข้าพร้อมกัน ส่วน frontend ใช้การ render + submit ในหน้า login 50 รอบแล้ววัด p95 จนถึงการ navigate ไป dashboard
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ยึดเพียง AC-AUTH-06 และ NFR-PERF-01 โดยไม่เพิ่มเงื่อนไขหรือค่าเกินจาก spec และคง task เฉพาะ T-15 ตาม task list เท่านั้น
+- ขอบเขต: ทำเฉพาะ T-15 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-16 specs/001-searchbook/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `specs/001-searchbook/spec.md`, `specs/001-searchbook/plan.md`, `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผลตรวจ: ตรวจสอบ traceability และ Open Questions ของ spec แล้วพบว่า `Q-03` เป็นข้อความตกค้างจาก spec เดิม ไม่ปรากฏในหัวข้อ Open Questions หรือ Assumptions; จึงยืนยันว่าไม่เพิ่มนโยบายความปลอดภัยใหม่ และแก้ traceability ให้ชี้ไปที่ `ASM-05` แทน
+- สิ่งที่ทำ: ลบ reference ที่ชี้ไปยัง `Q-03` ใน traceability, ปรับสรุป task ให้ไม่มี Open Question ค้าง, และเขียนบันทึกใน plan ว่า `Q-03` เป็นข้อความตกค้างและยึดตาม `ASM-05` เท่านั้น
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราไม่กำหนดนโยบายรหัสผ่านเพิ่มเติมเกิน NFR-SEC-01 และไม่สร้างคำถามใหม่ภายนอก scope ของ T-16
+- ขอบเขต: ทำเฉพาะ T-16 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป

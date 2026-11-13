@@ -9,6 +9,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.auth.repository import AuthRepository
+from app.auth.validation import validate_registration_payload
 from app.config import PASSWORD_MIN_LENGTH
 
 # รองรับ FR-AUTH-02, FR-AUTH-03, FR-AUTH-05 และ NFR-SEC-01
@@ -166,11 +167,13 @@ def _validate_and_build_profile(payload: Mapping[str, Any]) -> dict[str, Any]:
 def register_user(payload: Mapping[str, Any] | RegisterUserInput, repository: AuthRepository | None = None) -> dict[str, Any]:
     normalized = _normalize_payload(payload)
     role = _normalize_role(normalized.get("role"))
-    if role not in ROLE_ALIASES.values():
-        raise ValueError("บทบาทไม่ถูกต้อง")
 
-    if role not in PUBLIC_ROLES:
-        raise ValueError("ไม่อนุญาตให้สมัครด้วยบทบาทนี้")
+    repo = repository or AuthRepository()
+    validation = validate_registration_payload(normalized, repository=repo)
+    if not validation["valid"]:
+        errors = validation["errors"]
+        first_error = next(iter(errors.values()))
+        raise ValueError(first_error)
 
     email = str(normalized.get("email") or "").strip()
     password = str(normalized.get("password") or "")
@@ -197,7 +200,6 @@ def register_user(payload: Mapping[str, Any] | RegisterUserInput, repository: Au
     if role == "band" and not profile.get("band_name"):
         raise ValueError("ต้องระบุชื่อวง")
 
-    repo = repository or AuthRepository()
     if repo.get_by_email(email):
         raise ValueError("อีเมลนี้มีผู้ใช้อยู่แล้ว")
 

@@ -18,6 +18,7 @@ export default function LoginPage({ onNavigate = navigateTo } = {}) {
   const updateField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }))
     setErrors((current) => ({ ...current, [field]: '' }))
+    setSubmitError('')
   }
 
   const validate = () => {
@@ -52,7 +53,8 @@ export default function LoginPage({ onNavigate = navigateTo } = {}) {
       })
 
       if (!result?.success) {
-        setSubmitError(result?.message || 'เข้าสู่ระบบไม่สำเร็จ')
+        setAuthenticatedUser(null)
+        setSubmitError(result?.message || 'ดำเนินการไม่สำเร็จ กรุณาลองใหม่')
         return
       }
 
@@ -60,7 +62,8 @@ export default function LoginPage({ onNavigate = navigateTo } = {}) {
       setAuthenticatedUser(user)
       onNavigate(result.redirectTo || '/dashboard')
     } catch (error) {
-      setSubmitError(error?.message || 'เข้าสู่ระบบไม่สำเร็จ')
+      setAuthenticatedUser(null)
+      setSubmitError('ดำเนินการไม่สำเร็จ กรุณาลองใหม่')
     } finally {
       setIsSubmitting(false)
     }

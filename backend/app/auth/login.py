@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from app.auth.register import _hash_password
 from app.auth.repository import AuthRepository
 from app.auth.session import create_session, reset_sessions
+from app.auth.validation import validate_login_payload
 from app.config import (
     ACCOUNT_LOCKOUT_DURATION_MINUTES,
     FAILED_LOGIN_ATTEMPT_LIMIT,
@@ -52,34 +53,41 @@ def login_user(payload: Mapping[str, Any] | LoginUserInput, repository: AuthRepo
     password = _as_password(raw.get("password") or raw.get("userPassword") or raw.get("user_password"))
 
     repo = repository or AuthRepository()
-    user = repo.get_by_email(email)
-    now = datetime.now(timezone.utc)
 
-    if user is None:
-        raise ValueError(GENERIC_LOGIN_ERROR_MESSAGE)
+    try:
+        validate_login_payload({"email": email, "password": password}, repository=repo)
+        user = repo.get_by_email(email)
+        now = datetime.now(timezone.utc)
 
-    lock_until = user.get("lock_until")
-    if isinstance(lock_until, datetime) and lock_until > now:
-        raise ValueError(GENERIC_LOGIN_ERROR_MESSAGE)
-    if isinstance(lock_until, datetime) and lock_until <= now:
-        user["lock_until"] = None
+        if user is None:
+            raise ValueError(GENERIC_LOGIN_ERROR_MESSAGE)
+
+        lock_until = user.get("lock_until")
+        if isinstance(lock_until, datetime) and lock_until > now:
+            raise ValueError(GENERIC_LOGIN_ERROR_MESSAGE)
+        if isinstance(lock_until, datetime) and lock_until <= now:
+            user["lock_until"] = None
+            user["failed_login_count"] = 0
+
+        user_password_hash = str(user.get("password_hash") or "")
+        user_salt = str(user.get("salt") or "")
+
+        if not _verify_password(password, user_password_hash, user_salt):
+            failed_attempts = int(user.get("failed_login_count") or 0) + 1
+            user["failed_login_count"] = failed_attempts
+            if failed_attempts >= FAILED_LOGIN_ATTEMPT_LIMIT:
+                user["lock_until"] = now + timedelta(minutes=ACCOUNT_LOCKOUT_DURATION_MINUTES)
+            raise ValueError(GENERIC_LOGIN_ERROR_MESSAGE)
+
         user["failed_login_count"] = 0
+        user["lock_until"] = None
+        user["last_login_at"] = now
 
-    user_password_hash = str(user.get("password_hash") or "")
-    user_salt = str(user.get("salt") or "")
-
-    if not _verify_password(password, user_password_hash, user_salt):
-        failed_attempts = int(user.get("failed_login_count") or 0) + 1
-        user["failed_login_count"] = failed_attempts
-        if failed_attempts >= FAILED_LOGIN_ATTEMPT_LIMIT:
-            user["lock_until"] = now + timedelta(minutes=ACCOUNT_LOCKOUT_DURATION_MINUTES)
+        session = create_session(int(user["id"]))
+    except ValueError:
+        raise
+    except Exception:
         raise ValueError(GENERIC_LOGIN_ERROR_MESSAGE)
-
-    user["failed_login_count"] = 0
-    user["lock_until"] = None
-    user["last_login_at"] = now
-
-    session = create_session(int(user["id"]))
 
     return {
         "success": True,

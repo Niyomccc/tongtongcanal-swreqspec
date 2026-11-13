@@ -39,9 +39,30 @@ export default function RegisterPage({ onNavigate = navigateTo } = {}) {
   const activeRole = form.role
   const roleSummary = useMemo(() => getRoleLabel(activeRole), [activeRole])
 
+  const mapApiErrors = (apiErrors = {}) => {
+    const fieldMap = {
+      fullNameOrBandName: 'fullName',
+      fullName: 'fullName',
+      studentId: 'studentId',
+      universityCode: 'universityCode',
+      phoneNumber: 'phoneNumber',
+      bandName: 'bandName',
+      contactName: 'contactName',
+    }
+
+    return Object.entries(apiErrors).reduce((acc, [key, value]) => {
+      const field = fieldMap[key] ?? key
+      if (value) {
+        acc[field] = value
+      }
+      return acc
+    }, {})
+  }
+
   const updateField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }))
     setErrors((current) => ({ ...current, [field]: '' }))
+    setSubmitError('')
   }
 
   const validate = () => {
@@ -118,6 +139,11 @@ export default function RegisterPage({ onNavigate = navigateTo } = {}) {
 
       const result = await api.register(payload)
       if (!result?.success) {
+        const nextErrors = mapApiErrors(result?.errors || {})
+        if (Object.keys(nextErrors).length > 0) {
+          setErrors((current) => ({ ...current, ...nextErrors }))
+        }
+
         const message = result?.message || 'สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่'
         setSubmitError(message)
         return

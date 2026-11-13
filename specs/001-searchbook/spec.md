@@ -97,4 +97,4 @@ Owner: TBD | Status: Draft v2 | Updated: 2569-09-20
 | UC-01 acceptance criteria | FR-AUTH-05 | AC-AUTH-04 |
 | UC-01 exception flow | FR-AUTH-06 | AC-AUTH-05 |
 | UC-01 NFR (3 วินาที) | NFR-PERF-01 | AC-AUTH-06 |
-| UC-01 NFR (ความปลอดภัย) | NFR-SEC-01 | รอกำหนดมาตรการ (Q-03) |
+| UC-01 NFR (ความปลอดภัย) | NFR-SEC-01 | ASM-05 |

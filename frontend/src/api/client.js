@@ -34,6 +34,20 @@ export const api = {
     return { success: true, status: res.status, ...data }
   },
 
+  async getCurrentUser(role = '') {
+    const query = new URLSearchParams()
+    if (role) query.set('role', role)
+
+    const res = await fetch(`${BASE}/auth/me${query.toString() ? `?${query}` : ''}`)
+    const data = await res.json().catch(() => ({}))
+
+    if (!res.ok) {
+      return { success: false, message: data.message || 'ไม่สามารถโหลดข้อมูลผู้ใช้ได้', status: res.status }
+    }
+
+    return { success: true, status: res.status, ...data }
+  },
+
   async getSlots({ dateFrom, packageCode }) {
     const q = new URLSearchParams({ date_from: dateFrom, package_code: packageCode })
     const res = await fetch(`${BASE}/slots?${q}`)
