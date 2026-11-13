@@ -11,7 +11,7 @@ async function requestJson(url, options = {}) {
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw new Error(body?.message || 'การเชื่อมต่อกับเซิร์ฟเวอร์ไม่สำเร็จ')
+    throw new Error(body?.detail || body?.message || 'การเชื่อมต่อกับเซิร์ฟเวอร์ไม่สำเร็จ')
   }
 
   return res.json()
@@ -47,6 +47,14 @@ export const api = {
     const q = new URLSearchParams({ date_from: dateFrom, package_code: packageCode })
     const res = await fetch(`${BASE}/slots?${q}`)
     return res.json()
+  },
+
+  async getEventList() {
+    return requestJson(`${BASE}/events`)
+  },
+
+  async getEventById(eventId) {
+    return requestJson(`${BASE}/events/${encodeURIComponent(eventId)}`)
   },
 
   async getMyRegistrations({ user_id }) {

@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.auth.login import router as login_router
 from app.auth.register import router as register_router
 from app.auth.routes import router as auth_routes
+from app.routes.event_detail import router as event_detail_router
 
 
 # รองรับ PRE-REG-01 และ FR-REG-01: แอปเปิดได้พร้อมเส้นทางพื้นฐานสำหรับผู้ใช้ที่เข้าสู่ระบบแล้ว
@@ -20,3 +21,4 @@ def app_root() -> dict[str, str]:
 app.include_router(register_router)
 app.include_router(login_router)
 app.include_router(auth_routes)
+app.include_router(event_detail_router)

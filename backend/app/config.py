@@ -21,6 +21,28 @@ EVENT_REGISTRATION_LOW_SEAT_THRESHOLD = 5
 REGISTRATION_STATUS_REGISTERED = "ลงทะเบียน"
 REGISTRATION_STATUS_CANCELLED = "ยกเลิก"
 
+# PRE-EVD-01 และ FR-EVD-02: ตัวอย่างข้อมูลอีเว้นต์สำหรับหน้า Event Detail ใช้เป็น seed เริ่มต้นในระบบ
+EVENT_DETAIL_SAMPLE_EVENTS = [
+    {
+        "event_id": "EVT-001",
+        "title": "ดนตรีในสวน ครั้งที่ 5",
+        "event_date": "2026-11-20",
+        "start_time": "16:00",
+        "end_time": "21:00",
+        "location": "ลานกิจกรรม อาคาร 5",
+        "description": "คอนเสิร์ตกลางแจ้งที่รวมวงดนตรีและกิจกรรมถ่ายทอดสดในพื้นที่สันทนาการ",
+    },
+    {
+        "event_id": "EVT-002",
+        "title": "Battle of Bands",
+        "event_date": "2026-11-22",
+        "start_time": "18:30",
+        "end_time": "22:00",
+        "location": "อาคารศิลปะกลาง",
+        "description": "การแข่งขันวงดนตรีจากมหาวิทยาลัยต่าง ๆ พร้อมการแสดงและโซนกิจกรรมสาธารณะ",
+    },
+]
+
 # NFR-PERF-01
 RESPONSE_TIME_P95_TARGET_SECONDS = 3
 PERFORMANCE_CONCURRENT_USERS = 50
