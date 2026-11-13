@@ -1,3 +1,5 @@
+import RegisterPage from './pages/RegisterPage.jsx'
+
 function AuthStartPage() {
   // แสดงทางเข้าเข้าสู่ระบบ/สมัครสมาชิกก่อนพัฒนาแบบฟอร์มตาม FR-AUTH-01
   return (
@@ -65,18 +67,25 @@ function AuthStartPage() {
 }
 
 export default function App() {
-  // หน้าเข้าสู่ระบบสำหรับผู้ใช้ที่ยังไม่ได้เข้าสู่ระบบตาม PRE-AUTH-01
+  // แสดงหน้า Auth ตาม route สำหรับ PRE-AUTH-01 และ FR-AUTH-01
   if (window.location.pathname === '/auth') {
+    if (new URLSearchParams(window.location.search).get('mode') === 'register') {
+      return <RegisterPage />
+    }
+
     return <AuthStartPage />
   }
 
   // คงหน้าเริ่มต้นเดิมไว้ที่ route หลักระหว่างทยอยพัฒนาฟีเจอร์
   return (
-    <main className="mx-auto max-w-2xl p-6">
-      <h1 className="text-2xl font-bold text-teal-800">ระบบจองคิวตรวจสุขภาพ</h1>
-      <p className="mt-2 text-slate-600">
-        โครงหน้าจอพร้อมแล้ว หน้าจอของแต่ละ task จะอยู่ในโฟลเดอร์ src/pages/
-      </p>
+    <main className="mx-auto max-w-2xl p-6 text-center">
+      <h1 className="text-2xl font-bold text-teal-800">ระบบอีเว้นต์ดนตรีนักศึกษา</h1>
+      <a
+        className="mt-6 inline-flex rounded-lg bg-teal-700 px-5 py-3 font-semibold text-white hover:bg-teal-800"
+        href="http://127.0.0.1:5173/auth"
+      >
+        เข้าสู่ระบบ
+      </a>
     </main>
   )
 }

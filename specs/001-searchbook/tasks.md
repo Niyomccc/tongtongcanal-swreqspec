@@ -7,7 +7,7 @@
 
 สรุป:
 - เฟส: 8 (เฟส 0–6 และเฟสรอคำตอบ)
-- Tasks: 16; รอ Open Questions: 0
+- Tasks: 17; รอ Open Questions: 0
 - เฟสแรกที่ลองใช้งานจริง: เฟส 1 สมัครสมาชิกสำเร็จ
 
 ## เฟส 0 ฐานราก
@@ -58,6 +58,15 @@
 - ต้องทำหลัง: T-03
 - เสร็จเมื่อ: `test_AC_AUTH_01_register_form` ผ่านและหน้าจอเรียก API สมัครสมาชิกผ่าน `frontend/src/api/client.js` ก่อนนำผู้ใช้ไปหน้าหลัก
 - สถานะ: เสร็จ
+
+### T-17 เชื่อม route สมัครสมาชิกจากหน้า Auth
+- รองรับ: FR-AUTH-01
+- ตรวจด้วย: ไม่มี AC ตรง ๆ เป็นงานเชื่อม route ของ T-04
+- ไฟล์ที่แตะ: `frontend/src/App.jsx`, `frontend/src/__tests__/setup.test.jsx`
+- แบบหน้าจอ: UI-AUTH-02 `mockups/UI-AUTH-02-register.html`
+- ต้องทำหลัง: T-04
+- เสร็จเมื่อ: เมื่อเปิด `/auth?mode=register` แอปแสดง `RegisterPage` และมี test ยืนยันว่าหน้าสมัครสมาชิกแสดงที่ route นี้
+- สถานะ: เสร็จ รอทีมตรวจ
 
 #### จุดตรวจเฟส 1
 - test ที่ต้องผ่านทั้งหมด: `test_AUTH_app_startup`, `test_AUTH_models_and_config`, `test_AC_AUTH_01_register_success`, `test_AC_AUTH_01_register_form`
