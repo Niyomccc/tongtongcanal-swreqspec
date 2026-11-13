@@ -30,6 +30,33 @@
 
 ---
 
+## 2026-11-13 คำสั่ง: /implement T-05
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: specs/001-searchbook/tasks.md, backend/app/auth/login.py, backend/app/auth/session.py, backend/tests/test_auth_login.py, backend/app/main.py
+- ผล test: `cd backend && pytest -q` -> 4 passed in 0.73s; smoke-test route `/auth/login` ผ่านด้วย `TestClient` และคืน `redirectTo: /dashboard`
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; การตรวจสอบรหัสผ่านจาก hash, session timeout 30 นาที, และการล็อกบัญชี 5 ครั้ง/15 นาที ถูกใช้จาก config ที่มีอยู่แล้ว และไม่เพิ่มนโยบายใหม่เกิน spec
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-06
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: specs/001-searchbook/tasks.md, backend/app/auth/session.py, backend/app/auth/login.py, backend/tests/test_auth_security.py
+- ผล test: `cd backend && pytest -q` -> 5 passed in 1.16s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ตัวเลข session timeout 30 นาที และ lockout 5 ครั้ง/15 นาที ถูกใช้จาก [backend/app/config.py](./backend/app/config.py) โดยตรงตาม NFR-SEC-01 และไม่เพิ่มเงื่อนไขใหม่เกิน spec
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-07
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: specs/001-searchbook/tasks.md, frontend/src/api/client.js, frontend/src/pages/LoginPage.jsx, frontend/src/pages/RoleDashboard.jsx, frontend/src/__tests__/LoginPage.test.jsx
+- ผล test: `cd frontend && npm test -- --run src/__tests__/LoginPage.test.jsx` -> 1 passed
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้ฟังก์ชัน `api.login` และ `RoleDashboard` ตามสัญญา API ที่มีอยู่แล้วและไม่เพิ่มเส้นทาง/ฟีเจอร์ใหม่เกิน requirement ของ AC-AUTH-02
+
+---
+
 ## 2026-09-20 คำสั่ง: /clarify
 
 - เครื่องมือ: Copilot ใน Codespaces
@@ -131,6 +158,16 @@
 - ปรับ NFR-SEC-01 ให้ระบุมาตรการความปลอดภัยขั้นต่ำที่ชัดเจน
 - เพิ่ม ASM-02 ถึง ASM-07 เพื่อแปลงคำตอบทีมเป็น assumption ให้ spec มีความชัดเจน
 - เปลี่ยน Status จาก Draft v1 เป็น Draft v2 และอัปเดตวันที่
+
+## 2026-11-13 คำสั่ง: ทำ mockups 001-searchbook
+
+- เครื่องมือ: Copilot ใน Codespaces
+- ขอบเขต: สร้าง mockup สมัครสมาชิก/เข้าสู่ระบบตาม `specs/001-searchbook/spec.md`
+- คำถามที่ AI ถาม: โฟลเดอร์ระบุ `001-searchbook` แต่ spec ปัจจุบันเป็นฟีเจอร์สมัครสมาชิก/เข้าสู่ระบบ (SPEC-AUTH-001) ต้องการให้ยึด spec ปัจจุบันหรือส่ง spec Searchbook ที่ถูกต้อง?
+- คำตอบของทีม: ยึด spec ปัจจุบัน (auth_spec)
+- ผลลัพธ์: mockup HTML สำหรับหน้าสมัครสมาชิก/เข้าสู่ระบบและสถานะผิดพลาด โดยอ้างอิง FR-AUTH, AC-AUTH, NFR-SEC-01 และ ASM-02 ถึง ASM-04
+- หมายเหตุ: ไม่ออกแบบหน้าหลักหลังล็อกอิน เนื่องจาก spec ไม่ได้กำหนดรายละเอียดหน้าจอ
+- หมายเหตุเพิ่มเติม: แสดงผล HTML ผ่าน browser ได้ แต่ไม่ได้เก็บ PNG เพราะฟอนต์ไทยสำหรับการ export ภาพใน environment ไม่พร้อมใช้งาน
 
 ## 2026-09-20 คำสั่ง: /plan
 
@@ -384,8 +421,24 @@
 - ปรับ FR-APR-04 ให้ระบุช่องทางแจ้งผลหลักเป็นหน้าสถานะการสมัครและอีเมลเป็นเสริม พร้อมเงื่อนไขการแสดงสถานะใหม่และข้อความที่ยังไม่ได้เปิดดู
 - ปรับ FR-APR-07 และ NFR-AUD-01 ให้ระบุรายละเอียดประวัติการอนุมัติและระยะเวลาการเก็บข้อมูล
 - เพิ่ม ASM-02 ถึง ASM-07 เพื่อแปลงคำตอบทีมเป็น assumption
-- เปลี่ยน Status จาก Draft v1 เป็น Draft v2
 
+---
+
+## 2026-11-13 คำสั่ง: /implement T-03
+
+- เครื่องมือ: Copilot ใน Codespaces
+- ไฟล์ที่สร้าง/แก้: specs/001-searchbook/tasks.md, backend/app/auth/register.py, backend/app/auth/repository.py, backend/tests/test_auth_registration.py
+- ผล test: `cd backend && pytest -q` -> 2 passed in 0.42s
+- สรุป: สร้าง API สมัครสมาชิกสำหรับบทบาทที่อนุญาต (student/audience/band) โดยตรวจอีเมล รหัสผ่าน ความยาวขั้นต่ำ และปฏิเสธผู้จัดงาน/Admin สมัครเอง พร้อม hash รหัสผ่านด้วย salt และบันทึกข้อมูลโปรไฟล์ที่จำเป็นสำหรับนักศึกษา/ผู้ชม/วงดนตรี การตรวจเงื่อนไขที่หลีกเลี่ยงความเดา: ไม่ได้ปรับ spec หรือข้อสรุปใหม่ใด ๆ เหนือสิ่งที่ระบุใน FR-AUTH-02, FR-AUTH-03, FR-AUTH-05 และ NFR-SEC-01เป็น assumption- เปลี่ยน Status จาก Draft v1 เป็น Draft v2
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-04
+
+- เครื่องมือ: Copilot ใน Codespaces
+- ไฟล์ที่สร้าง/แก้: specs/001-searchbook/tasks.md, frontend/src/pages/RegisterPage.jsx, frontend/src/api/client.js, frontend/src/__tests__/RegisterPage.test.jsx
+- ผล test: `cd frontend && npm test -- --run` -> 2 tests passed in 2.64s
+- สรุป: สร้างหน้าฟอร์มสมัครสมาชิกตามบทบาทนักศึกษา/ผู้ชม/วงดนตรี พร้อม validation, การเรียก API สมัครสมาชิกผ่าน client.js, และ redirect ไปหน้า dashboard หลังสำเร็จ ตาม FR-AUTH-01, FR-AUTH-02, FR-AUTH-03, FR-AUTH-05 ความเดาที่หลีกเลี่ยงคือไม่เพิ่มฟีเจอร์นอก Task T-04 และไม่ข้ามไปทำ T-05-T-16 ตามเงื่อนไข /implement ที่ต้องทำ task เดียวเท่านั้นเป็น assumption- เปลี่ยน Status จาก Draft v1 เป็น Draft v2
 ---
 ---
 >>>>>>> f53b097 (Clarify band approval spec)
@@ -467,3 +520,28 @@
 - ปรับ NFR-BKP-01 ให้ระบุ daily backup, retention อย่างน้อย 30 วัน, RPO ไม่เกิน 24 ชั่วโมง และ RTO ไม่เกิน 4 ชั่วโมง
 - เพิ่ม ASM-02 ถึง ASM-04 และคงคำถามที่ยังไม่ได้คำตอบเป็น Q-04 ถึง Q-07
 - เปลี่ยน Status จาก Draft v1 เป็น Draft v2 และอัปเดตวันที่
+
+## 2026-11-13 คำสั่ง: /tasks specs/001-searchbook/spec.md
+
+- เครื่องมือ: Copilot ใน Codespaces
+- ไฟล์อ้างอิง: `specs/001-searchbook/spec.md`, `plan.md`, `specs/000-shared/*.md`, และ mockup UI-AUTH-01 ถึง UI-AUTH-03
+- ผลลัพธ์: สร้าง `specs/001-searchbook/tasks.md` แบ่ง 8 เฟส รวม 16 tasks ครอบคลุม AC-AUTH-01 ถึง AC-AUTH-06
+- งานที่รอคำตอบ: 1 task รอ Q-03 ซึ่งถูกอ้างใน traceability แต่ไม่มีรายละเอียดใน Open Questions
+- ประเด็นที่ยังไม่เดา: ฐานข้อมูล วิธี session/JWT รายการสิทธิ์ คำสั่งรัน backend และเครื่องมือทดสอบโหลดไม่ได้กำหนดใน plan/spec
+- ขอบเขต: สร้าง tasks.md และบันทึกนี้เท่านั้น ไม่เริ่ม implementation
+
+## 2026-11-13 คำสั่ง: /implement T-01 specs/001-searchbook/tasks.md
+
+- ไฟล์ implementation: `backend/app/main.py`, `frontend/src/App.jsx`
+- ไฟล์สถานะ/บันทึก: `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผลตรวจ: `cd frontend && npm test` ผ่าน 1 test; `cd frontend && npm run build` ผ่าน; `cd backend && python -c 'from app.main import app; assert app.title == "Authentication API"'` ผ่าน; เปิด Vite แล้วตรวจ route `/auth` ใน browser พบหน้าทางเข้าเข้าสู่ระบบ/สมัครสมาชิก
+- สิ่งที่ต้องยืนยันกับทีม: ปุ่มส่งเข้าสู่ระบบและลิงก์สมัครสมาชิกเป็นเพียงจุดตั้งต้นใน T-01; การทำงานจริงอยู่ใน tasks ถัดไป
+- หมายเหตุ: คำสั่งทดสอบ npm/python ครั้งแรกเรียกจาก root แล้วล้มเหลวเพราะ project files อยู่ใน `frontend/` และ `backend/`; รันซ้ำจากโฟลเดอร์ที่ถูกต้องแล้วผ่าน
+
+## 2026-11-13 คำสั่ง: /implement T-02 specs/001-searchbook/tasks.md
+
+- ไฟล์ implementation: `backend/app/models/auth.py`, `backend/app/config.py`, `frontend/src/config.js`
+- ไฟล์สถานะ/บันทึก: `specs/001-searchbook/tasks.md`, `prompt-log.md`
+- ผลตรวจ: `test_AUTH_models_and_config` ผ่าน; `test_AUTH_app_startup` ผ่าน; `cd frontend && npm test` ผ่าน 1 test; `cd frontend && npm run build` ผ่าน
+- สิ่งที่ยังไม่กำหนด: ไม่ได้เพิ่มเงื่อนไขรหัสผ่านนอกขั้นต่ำ 8 ตัวอักษร เพราะนโยบายหน่วยงานยังไม่ระบุ; ไม่ได้เลือกฐานข้อมูลหรือ session/JWT ซึ่ง plan.md ยังไม่ได้กำหนด
+- ขอบเขต: สร้างโมเดล Auth และค่ากฎจากข้อกำหนดเท่านั้น; ไม่ได้เริ่ม task ถัดไป
