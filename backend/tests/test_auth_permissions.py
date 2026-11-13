@@ -18,7 +18,12 @@ def test_AC_AUTH_04_role_permissions():
     with pytest.raises(PermissionError):
         require_permission("student", "manage_events")
 
-    assert get_allowed_permissions("student") == {"view_dashboard", "view_schedule", "manage_own_profile"}
+    assert get_allowed_permissions("student") == {
+        "view_dashboard",
+        "view_schedule",
+        "manage_own_profile",
+        "register_for_event",
+    }
 
     result = check_permission_endpoint(PermissionCheckInput(role="student", permission="manage_events"))
     assert result["success"] is False

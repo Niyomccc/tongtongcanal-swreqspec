@@ -4,6 +4,7 @@ import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+from app.auth.permissions import get_user_display_role, normalize_role
 from app.config import SESSION_IDLE_TIMEOUT_MINUTES
 
 # รองรับ FR-AUTH-03 และ NFR-SEC-01
@@ -19,14 +20,17 @@ def _utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def create_session(user_id: int, *, session_id: str | None = None) -> dict[str, Any]:
-    """สร้าง session สำหรับผู้ใช้และกำหนดวันหมดอายุตาม idle timeout"""
+def create_session(user_id: int, *, session_id: str | None = None, role: str | None = None) -> dict[str, Any]:
+    """สร้าง session พร้อมบทบาทที่ใช้ตรวจสิทธิ์ตาม NFR-SEC-01 และ Q-05"""
     generated_session_id = session_id or secrets.token_urlsafe(32)
     issued_at = _utc_now()
     expires_at = issued_at + timedelta(minutes=SESSION_IDLE_TIMEOUT_MINUTES)
+    normalized_role = normalize_role(role) or None
     record = {
         "session_id": generated_session_id,
         "user_id": user_id,
+        "role": normalized_role,
+        "display_role": get_user_display_role(normalized_role) if normalized_role else None,
         "issued_at": issued_at,
         "expires_at": expires_at,
         "last_seen_at": issued_at,
@@ -48,7 +52,7 @@ def get_session(session_id: str) -> dict[str, Any] | None:
 
 
 def validate_session(session_id: str) -> dict[str, Any] | None:
-    """ตรวจ session และต่ออายุเมื่อใช้งานอีกครั้งภายใต้ idle timeout"""
+    """ตรวจ session และต่ออายุเมื่อใช้งานอีกครั้งภายใต้ idle timeout พร้อมให้ role และสิทธิ์พร้อมใช้งาน"""
     session = _SESSION_STORE.get(session_id)
     if session is None:
         return None
@@ -61,6 +65,18 @@ def validate_session(session_id: str) -> dict[str, Any] | None:
     session["last_seen_at"] = now
     session["expires_at"] = now + timedelta(minutes=SESSION_IDLE_TIMEOUT_MINUTES)
     return session
+
+
+def get_session_user_context(session_id: str) -> dict[str, Any] | None:
+    """คืน context ที่ใช้ตรวจสิทธิ์ข้อมูลลงทะเบียนตาม NFR-SEC-01 และ Q-05"""
+    session = get_session(session_id)
+    if session is None:
+        return None
+    return {
+        "user_id": session.get("user_id"),
+        "role": session.get("role"),
+        "display_role": session.get("display_role"),
+    }
 
 
 def invalidate_session(session_id: str) -> bool:
@@ -79,6 +95,7 @@ __all__ = [
     "create_session",
     "get_session",
     "validate_session",
+    "get_session_user_context",
     "invalidate_session",
     "list_sessions_for_user",
     "reset_sessions",

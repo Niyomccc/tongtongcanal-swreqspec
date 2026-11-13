@@ -33,9 +33,27 @@
 ## 2026-11-13 คำสั่ง: /implement T-05
 
 - เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: ไม่มี — ถูกปฏิเสธก่อนเริ่มทำงาน เพราะ task อยู่ในสถานะ “รอ Q-01” และ spec ระบุว่าค่าคะแนนเกณฑ์ "ที่นั่งเหลือน้อย" ยังไม่ได้กำหนด
+- ผล test: ไม่เริ่ม; ถูกหยุดตามเงื่อนไขของ /implement เพราะ Q-01 ยังเปิด และ task ไม่ใช่สถานะ “พร้อมทำ”
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ค่า [N] หรือ [P]% สำหรับการแจ้งจำนวนที่นั่งเหลือน้อยยังไม่มีกำหนดใน spec จึงต้องรอทีมตอบก่อนจึงจะเริ่ม implement ได้ตาม Spec-Driven Development
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-05
+
+- เครื่องมือ: Copilot SDK ใน VS Code
 - ไฟล์ที่แก้/สร้าง: specs/001-searchbook/tasks.md, backend/app/auth/login.py, backend/app/auth/session.py, backend/tests/test_auth_login.py, backend/app/main.py
 - ผล test: `cd backend && pytest -q` -> 4 passed in 0.73s; smoke-test route `/auth/login` ผ่านด้วย `TestClient` และคืน `redirectTo: /dashboard`
 - สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; การตรวจสอบรหัสผ่านจาก hash, session timeout 30 นาที, และการล็อกบัญชี 5 ครั้ง/15 นาที ถูกใช้จาก config ที่มีอยู่แล้ว และไม่เพิ่มนโยบายใหม่เกิน spec
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-07
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: backend/app/auth/register.py, backend/app/auth/repository.py, backend/tests/test_auth_registration.py, specs/004-registration/tasks.md
+- ผล test: `cd backend && pytest -q tests/test_auth_registration.py` -> 6 passed in 0.66s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; การตรวจสอบความจุและการป้องกัน race condition ดำเนินผ่าน lock ภายใน repository และ rewrap ข้อผิดพลาดซ้ำให้ตรงตาม AC-REG-04/AC-REG-05 โดยไม่เพิ่มเงื่อนไขใหม่เกิน spec
 
 ---
 
@@ -68,7 +86,134 @@
 - เครื่องมือ: Copilot SDK ใน VS Code
 - ไฟล์ที่แก้/สร้าง: specs/001-searchbook/tasks.md, backend/app/auth/validation.py, backend/app/auth/register.py, backend/app/auth/login.py, backend/tests/test_auth_validation.py
 - ผล test: `cd backend && pytest -q` -> 6 passed in 1.27s
-- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; validation เพิ่มเป็น layer ที่ตรวจข้อมูลสมัคร/เข้าสู่ระบบแบบ generic ตาม spec โดยไม่เปิดเผยข้อมูลที่ผิดว่าผิดตรงไหน และใช้ `PASSWORD_MIN_LENGTH` จาก config เดิมเพื่อหลีกเลี่ยงการฝังตัวเลข
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; validation เพิ่มเป็น layer ที่ตรวจข้อมูลสมัคร/เข้าสู่ระบบแบบ generic ตาม spec โดยไม่เปิดเผยข้อมูลที่ผิดว่าผผิดตรงไหน และใช้ `PASSWORD_MIN_LENGTH` จาก config เดิมเพื่อหลีกเลี่ยงการฝังตัวเลข
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- AC: AC-REG-01
+- ไฟล์ที่สร้าง: specs/004-registration/test-cases.md
+- TC ที่เสนอ: TC-REG-01-1, TC-REG-01-2, TC-REG-01-3
+- ผล: ไม่มีโค้ด test ถูกเขียน เพราะยังไม่มีแถวสถานะ “ใช้ได้” ในตารางและมี One “spec ไม่ได้บอก” ให้รอทีมตรวจ/แก้ตามคำสั่ง /testcases
+- ข้อสรุป: ต้องตรวจแถวในตาราง แก้ได้ตามต้องการ แล้วเปลี่ยนสถานะเป็น “ใช้ได้” ก่อน จากนั้นเรียก /testcases อีกครั้งเพื่อเขียน test ตามแถวที่ตรวจแล้ว
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- AC: AC-REG-02
+- ไฟล์ที่ปรับปรุง: specs/004-registration/test-cases.md
+- TC ที่เสนอ: TC-REG-02-1, TC-REG-02-2, TC-REG-02-3
+- ผล: ยังไม่มีโค้ด test ถูกเขียน เพราะคาดว่าจะให้ทีมตรวจแถวก่อนและต้องเปลี่ยนสถานะเป็น “ใช้ได้” ก่อนตามกติกา
+- ข้อสรุป: TC-REG-02-3 มีคำว่า “spec ไม่ได้บอก” สำหรับการปฏิเสธ/แจ้งผลเมื่อข้อมูลไม่ตรงกับข้อมูลยืนยัน ควรให้ทีมตรวจและยืนยันว่าต้องเป็นค่าที่ไหนก่อนจึงจะเริ่มเขียน test ต่อ
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- AC: AC-REG-03
+- ไฟล์ที่ปรับปรุง: specs/004-registration/test-cases.md
+- TC ที่เสนอ: TC-REG-03-1, TC-REG-03-2, TC-REG-03-3
+- ผล: ยังไม่มีโค้ด test ถูกเขียน เพราะยังอยู่ในโหมดร่างและตามกติกา ต้องรอการตรวจแถว/เปลี่ยนสถานะเป็น “ใช้ได้” ก่อน
+- ข้อสรุป: AC-REG-03 มีข้อมูลเกณฑ์ชัดเจนแล้วจาก Q-01 (N = 5) จึงสามารถกำหนดทางปกติและขอบได้; การกรณี “เงื่อนไขไม่เป็นจริง” ที่ไม่เปิดให้ลงทะเบียนหรือไม่มีอีเว้นต์ที่เลือก ยังไม่มีผลลัพธ์ที่ชัดเจนใน spec จึงคงไว้เป็น “spec ไม่ได้บอก” เพื่อให้ทีมตรวจต่อ
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- AC: AC-REG-04
+- ไฟล์ที่ปรับปรุง: specs/004-registration/test-cases.md
+- TC ที่เสนอ: TC-REG-04-1, TC-REG-04-2, TC-REG-04-3
+- ผล: ยังไม่มีโค้ด test ถูกเขียน เพราะยังอยู่ในโหมดร่างและตามกติกา ต้องรอการตรวจแถว/เปลี่ยนสถานะเป็น “ใช้ได้” ก่อน
+- ข้อสรุป: AC-REG-04 มีเงื่อนไขที่ชัดเจนว่ารายการยกเลิกไม่ถือเป็นรายการซ้ำ (ASM-05) จึงสามารถยอมให้ลงทะเบียนใหม่ได้เมื่อไม่มีรายการที่ยังไม่ยกเลิก; ส่วนผลข้อความ “ลงทะเบียนซ้ำไม่ได้” ในกรณีปฏิเสธยังอยู่ใน spec โดยตรงและใช้สำหรับ TC-REG-04-1
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- AC: AC-REG-05
+- ไฟล์ที่ปรับปรุง: specs/004-registration/test-cases.md
+- TC ที่เสนอ: TC-REG-05-1, TC-REG-05-2, TC-REG-05-3
+- ผล: ยังไม่มีโค้ด test ถูกเขียน เพราะยังอยู่ในโหมดร่างและต้องรอการตรวจแถว/เปลี่ยนสถานะเป็น “ใช้ได้” ก่อน
+- ข้อสรุป: AC-REG-05 ระบุชัดเจนว่าถึงแม้มีผู้ใช้หลายคนยืนยันพร้อมกัน ระบบต้องให้สำเร็จเพียงคนเดียวและปฏิเสธคนอื่น; ส่วนข้อความที่ “แจ้งว่าที่นั่งเต็ม” มีอยู่ใน AC แต่รายละเอียดแบบ UI ยังต้องรอคำตอบ Q-04 จึงยังอยู่นอกช่วงตรวจแบบกำหนดการเข้า test code
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- AC: AC-CXL-03
+- ไฟล์ที่ปรับปรุง: specs/005-cancel-registration/test-cases.md
+- TC ที่เสนอ: TC-CXL-03-1, TC-CXL-03-2, TC-CXL-03-3
+- ผล: ยังไม่มีโค้ด test ถูกเขียน เพราะตารางยังอยู่ในโหมดร่าง และเงื่อนไขของ AC-CXL-03 ยังไม่ผ่านการตรวจจากทีม ให้ข้อสรุปว่าห้ามใช้ “spec ไม่ได้บอก” เป็นฐานทดสอบโดยไม่ให้ทีมยืนยันก่อน
+- ข้อสรุป: ตรวจแถวในตาราง แก้ได้ตามต้องการ แล้วเปลี่ยนสถานะเป็น “ใช้ได้” ก่อน จากนั้นสั่ง /testcases อีกครั้ง
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- AC: AC-CXL-04
+- ไฟล์ที่ปรับปรุง: specs/005-cancel-registration/test-cases.md
+- TC ที่เสนอ: TC-CXL-04-1, TC-CXL-04-2, TC-CXL-04-3
+- ผล: ยังไม่มีโค้ด test ถูกเขียน เพราะฉากนี้ยังเป็นโหมดร่างตามกติกา และกรณี “ไม่มีข้อความยืนยัน / ไม่พบ registration” ยังต้องรอทีมยืนยันความหมายแบบละเอียดก่อนจะใช้เป็น “ใช้ได้”
+- ข้อสรุป: ตรวจแถวในตาราง แก้ได้ตามต้องการ แล้วเปลี่ยนสถานะเป็น “ใช้ได้” ก่อน จากนั้นสั่ง /testcases อีกครั้ง
+
+---
+
+## 2026-11-13 คำสั่ง: /testcases
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ร่าง (draft)
+- AC: AC-CXL-05
+- ไฟล์ที่ปรับปรุง: specs/005-cancel-registration/test-cases.md
+- TC ที่เสนอ: TC-CXL-05-1, TC-CXL-05-2, TC-CXL-05-3
+- ผล: ยังไม่มีโค้ด test ถูกเขียน เพราะยังอยู่ในโหมดร่าง; พฤติกรรม “ไม่พบข้อมูล” สหสัมพันธ์กับ Q-04 และ Q-08 ยังน่าจะต้องรอทีมตัดสินว่าต้องใช้ข้อความและเงื่อนไขแบบไหน
+- ข้อสรุป: ตรวจแถวในตาราง แก้ได้ตามต้องการ แล้วเปลี่ยนสถานะเป็น “ใช้ได้” ก่อน จากนั้นสั่ง /testcases อีกครั้ง
+
+---
+
+## 2026-11-13 คำสั่ง: /verify
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- โหมด: ตรวจ requirement แบบตามรอยไปข้างหน้าและย้อนกลับ
+- path: specs/005-cancel-registration/
+- ผล test: backend `cd backend && pytest -v` -> 30 passed in 9.39s; frontend `cd frontend && npm test -- --run` -> 14 passed, 1 failed (frontend/setup.test.jsx ที่ตรวจข้อความ `ระบบจองคิวตรวจสุขภาพ` ไม่ตรงกับหน้าแอปจริงที่แสดง `ระบบลงทะเบียนเข้าชมงาน`)
+- จำนวนแถวใน RTM: 12 row ในตารางไปข้างหน้า, 5 row ในตารางย้อนกลับ, 3 ข้อค้นพบ
+- F-ID ของข้อค้นพบใหม่: F-CXL-01, F-CXL-02, F-CXL-03
+- ข้อสรุป: ทั้ง requirement และ AC ของ cancel-registration มี code + test ที่ตรวจได้ตรงตาม spec หลัก แต่มีความเสี่ยงที่ feature ได้ก้าวไปจาก source of truth เพราะ spec.md ยังคงมี Q-04 ถึง Q-08 เปิดและโค้ดมีการตัดสินใจด้าน ownership, atomicity, current-count display, และ audit metadata ที่ยังไม่ปรากฏใน spec ต้นฉบับ
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-09
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: backend/app/config.py, frontend/src/config.js, frontend/src/pages/RegisterPage.jsx, specs/004-registration/tasks.md
+- ผล test: `cd backend && pytest -q tests/test_auth_registration.py` -> 7 passed in 0.43s; `cd frontend && npm test -- --run src/__tests__/RegisterPage.test.jsx` -> 3 passed in 1.46s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ค่าที่นั่งเหลือน้อยใน AC-REG-03 ถูกยืนยันเป็น N = 5 ที่นั่งที่เหลือ และผลลัพธ์สำเร็จใช้ข้อความ/ป้ายกำกับที่จัดไว้ที่ config เดียวเพื่อให้ backend และ frontend สอดคล้องกัน และไม่เพิ่ม requirement ใหม่เกินคำถามที่มีคำตอบแล้ว
+
+---
+
+## 2026-11-13 คำสั่ง: /tasks
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่สร้าง: specs/004-registration/tasks.md
+- ผลลัพธ์: สร้าง tasks.md เรียงตามเฟส vertical slice สำหรับฟีเจอร์ลงทะเบียนเข้าชมงาน โดยใช้ spec.md และ plan.md เป็นข้อมูลหลัก และบันทึก Open Questions Q-01 ถึง Q-05 เป็นเฟสสุดท้าย "รอคำตอบ" พร้อมแสดงจำนวนเฟส/จำนวน task/จำนวนที่รอ Q-xx จาก spec อย่างชัดเจน
+- ข้อสรุป: เฟสรวม 5 เฟส (0–3 + รอคำตอบ), 10 tasks, 4 tasks อยู่ในสถานะรอ Q-xx; เฟสแรกที่ลองใช้งานจริงคือเฟส 1 ลงทะเบียนสำเร็จ
+- สาเหตุที่หยุด: spec ยังมี Q-01 ถึง Q-05 ที่ยังไม่ตอบ จึงไม่สามารถกำหนดค่าเกณฑ์จำนวนที่นั่งเหลือน้อย ฟิลด์ข้อมูลผู้ลงทะเบียน ความปลอดภัยเพิ่มเติม และข้อมูลผลลัพธ์แสดงผลได้อย่างสมบูรณ์ตามกฎของ Spec-Driven Development
 
 ---
 
@@ -231,6 +376,26 @@
 6. ยังไม่มีคำตอบ ย้ายไป Open Questions (Q-06 ต้องถามทีมเอง)
 7. ยังไม่กำหนดค่า ให้ NFR-PERF-01 ใช้ [X] วินาที, [P]% ของคำขอ และผู้ใช้พร้อมกัน [N] คนไปก่อน ยังทดสอบไม่ได้จนกว่าจะกำหนดค่าจริง
 
+---
+
+## 2026-11-13 คำสั่ง: /implement T-05
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: backend/app/config.py, backend/app/auth/register.py, backend/tests/test_auth_registration.py, specs/004-registration/tasks.md, specs/004-registration/spec.md
+- ผล test: `cd backend && pytest -q tests/test_auth_registration.py` -> 7 passed in 0.42s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ได้ถามและรับคำตอบจากผู้ใช้ให้ใช้ค่า Q-01 เป็น N = 5 ที่นั่งที่เหลือ โดยเมื่อ remaining_seats <= 5 ระบบจะแจ้งข้อความ "เหลือที่นั่งไม่เกิน 5 ที่นั่ง" และไม่เพิ่มเกณฑ์อื่นเกินความต้องการของ spec
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-010
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่พิจารณา: [specs/004-registration/tasks.md](./specs/004-registration/tasks.md), [specs/004-registration/spec.md](./specs/004-registration/spec.md), [AGENTS.md](./AGENTS.md)
+- ผลการประเมิน: ถูกปฏิเสธก่อนเริ่ม implement ตามกติกา Spec-Driven Development เนื่องจาก task ที่แท้จริงในไฟล์คือ T-10 และมีสถานะ "รอ Q-02, Q-03, Q-05" ซึ่งหมายความว่า task ยังไม่พร้อมทำและไม่ควรเดา/เพิ่มนโยบายใหม่
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มีการเริ่มเขียนโค้ด เพราะมี Open Questions ที่ยังปิดไม่เสร็จ และกฎบังคับให้หยุดก่อนเริ่มงาน หากต้องการให้ทำต่อ ต้องตอบ Q-02 / Q-03 / Q-05 หรือปรับ spec ให้ปิดคำถามก่อน
+
+---
+
 ### สิ่งที่แก้ใน spec.md (v1 เป็น v2)
 
 - เปลี่ยน Status เป็น Draft v2 และอัปเดตวันที่
@@ -271,6 +436,15 @@
 - เพิ่ม ASM-02 ถึง ASM-04 เพื่อแปลงคำตอบทีมเป็น assumption
 - คง Q-01 ไว้เป็น Open Question เนื่องจากยังไม่ชัดเจนว่าสถานที่เดียวกัน/วงเดียวกัน/ทั้งสองอย่างถือว่าซ้ำหรือไม่
 - เปลี่ยน Status จาก Draft v1 เป็น Draft v2 และอัปเดตวันที่
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-04
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: frontend/src/pages/RegisterPage.jsx, specs/004-registration/tasks.md
+- ผล test: `cd frontend && npm test -- --run src/__tests__/RegisterPage.test.jsx` -> 1 passed; `cd backend && pytest tests/test_auth_registration.py -q` -> 4 passed in 0.43s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้กฎการคัดเลือกโหมดแบบหน้าจอจาก prop `mode`, `user`, และ `events` เพื่อให้หน้าลงทะเบียนอีเว้นต์เปิดได้ทั้งกรณีมีข้อมูลผู้ใช้และอีเว้นต์พร้อมกัน และไม่บังคับให้ผู้ใช้/อีเว้นต์ต้องผ่านครบทุก prop ก่อนแสดงหน้าลงทะเบียนตาม precondition PRE-REG-01
 
 ---
 
@@ -345,6 +519,24 @@
 
 ---
 
+## 2026-11-13 คำสั่ง: /implement T-06
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: backend/app/auth/register.py, backend/tests/test_auth_registration.py, frontend/src/pages/RegisterPage.jsx, frontend/src/__tests__/RegisterPage.test.jsx, specs/004-registration/tasks.md
+- ผล test: `cd backend && pytest tests/test_auth_registration.py -q` -> 5 passed in 0.43s; `cd frontend && npx vitest run src/__tests__/RegisterPage.test.jsx` -> 2 passed
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เรารักษาขอบเขต T-06 เฉพาะการป้องกันซ้ำตาม FR-REG-05 และ AC-REG-04 และใช้ข้อความจาก mockup UI-REG-01 เป็น "ลงทะเบียนซ้ำไม่ได้ คุณลงทะเบียนอีเว้นต์นี้ไว้แล้ว" เพื่อให้สอดตรงกับ requirement ที่ระบุว่าต้องแสดงว่าลงทะเบียนซ้ำไม่ได้
+
+---
+
+## 2026-11-13 คำสั่ง: /implement T-08
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: frontend/src/pages/RegisterPage.jsx, frontend/src/__tests__/RegisterPage.test.jsx, specs/004-registration/tasks.md
+- ผล test: `cd frontend && npm test -- --run src/__tests__/RegisterPage.test.jsx` -> 3 passed in 1.47s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: วางปุ่มย้อนกลับและข้อความข้อผิดพลาดจาก Q-04 ให้ใช้ "ชื่ออีเว้นต์, วันที่และเวลา, ประเภทบัตร/บัตรเข้าชม, ชื่อผู้ใช้, ข้อความยืนยันสำเร็จ, รหัสลงทะเบียน, สถานะการลงทะเบียน" ตามคำตอบของทีม และคงข้อความเป็น "ลงทะเบียนสำเร็จแล้ว" เพื่อให้ UI ตรงกับผลลัพธ์ที่ผู้จัดงานต้องการแม้ยังไม่มี schema จริงใน backend
+
+---
+
 ## 2026-09-20 15:40 คำสั่ง: /clarify
 
 - เครื่องมือ: Copilot ใน Codespaces
@@ -414,6 +606,17 @@
 - เครื่องมือ: Copilot ใน Codespaces
 - ไฟล์: specs/009-BandApproval/spec.md (v1)
 
+---
+
+## 2026-11-13 คำสั่ง: /verify specs/004-registration/
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ผล test: backend `cd backend && pytest -v` -> 21 passed in 9.36s; frontend `cd frontend && npm test -- --run` -> 10 passed, 1 failed in 11.72s
+- สถานะตาม RTM: ครบ 11, ยังไม่ถึง 0, รอ 1, ช่องโหว่ 1
+- ข้อค้นพบใหม่: F-REG-01, F-REG-02
+- สรุป: Registration core flow (FR-REG-01 ถึง FR-REG-05, AC-REG-01 ถึง AC-REG-05) มีโค้ดและ test ที่ตรวจจริงผ่านใน backend และ frontend register-specific suite; ความก้าวหน้าเป็นไปตาม spec อย่างชัดเจน แต่ Q-04 ยังวางเงื่อนไขไม่ชัดเรื่องข้อมูลผลสำเร็จ และ frontend suite ทั้งชุดยังมี 1 failed จาก setup test อันไม่เกี่ยวกับ feature registration
+- หมายเหตุ: ไม่ได้แก้โค้ดหรือ test ตามกฎ /verify; เพียงจัดทำ RTM และบันทึกผลตรวจเท่านั้น
+
 ### คำถามที่ AI ถาม (ทั้งหมด)
 
 1. ต้องมีสถานะเฉพาะสำหรับส่งกลับแก้ไขหรือใช้สถานะเดิมรอตรวจสอบ?
@@ -448,6 +651,15 @@
 
 ---
 
+## 2026-11-13 คำสั่ง: /implement T-02
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: backend/app/models/auth.py, backend/app/config.py, backend/tests/test_registration_models.py
+- ผล test: `cd backend && pytest -q backend/tests/test_registration_models.py backend/tests/test_auth_registration.py backend/tests/test_auth_login.py --maxfail=1` -> 5 passed in 1.54s
+- สรุป: เพิ่มโครงข้อมูล Event และ Registration ให้รองรับ event_id, capacity, remaining_seats, user_id + event_id unique constraint ตาม FR-REG-01, FR-REG-02, FR-REG-05, ASM-01, ASM-02 และ ASM-03 โดยไม่เพิ่มค่าเกณฑ์หรือความหมายใหม่ที่ยังไม่ได้มาจาก spec
+
+---
+
 ## 2026-11-13 คำสั่ง: /implement T-04
 
 - เครื่องมือ: Copilot ใน Codespaces
@@ -456,6 +668,16 @@
 - สรุป: สร้างหน้าฟอร์มสมัครสมาชิกตามบทบาทนักศึกษา/ผู้ชม/วงดนตรี พร้อม validation, การเรียก API สมัครสมาชิกผ่าน client.js, และ redirect ไปหน้า dashboard หลังสำเร็จ ตาม FR-AUTH-01, FR-AUTH-02, FR-AUTH-03, FR-AUTH-05 ความเดาที่หลีกเลี่ยงคือไม่เพิ่มฟีเจอร์นอก Task T-04 และไม่ข้ามไปทำ T-05-T-16 ตามเงื่อนไข /implement ที่ต้องทำ task เดียวเท่านั้นเป็น assumption- เปลี่ยน Status จาก Draft v1 เป็น Draft v2
 ---
 ---
+
+## 2026-11-13 คำสั่ง: /implement T-03
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: backend/app/auth/register.py, backend/tests/test_auth_registration.py, specs/004-registration/tasks.md
+- ผล test: `cd backend && pytest tests/test_auth_registration.py tests/test_registration_models.py -q` -> 6 passed in 0.77s
+- สรุป: เพิ่ม API ลงทะเบียนอีเว้นต์ที่รองรับ FR-REG-02 และ NFR-DAT-01 โดยยอมรับ `user_id` + `event_id` และ `confirmation_snapshot`, ตรวจสอบว่าอีเว้นต์เปิดและมีที่ว่างก่อนบันทึก, และบันทึกข้อมูลยืนยันให้ตรงกับผู้ใช้ที่ลงทะเบียนจริง โดยใช้ repository logic ที่มีอยู่แล้ว ข้อมูลที่เก็บใช้ `confirmation_snapshot` และ `user_id` + `event_id` unique guard ตาม ASM-02 และไม่เพิ่มกติกาใหม่เกินจาก spec; ยังคงหลีกเลี่ยงการเดาเรื่องค่าเกณฑ์ [N]/[P] และฟิลด์ยืนยันละเอียดตาม Q-02 โดยเลือก schema ที่สอดคล้องกับ repository และ AC-REG-02
+
+---
+
 >>>>>>> f53b097 (Clarify band approval spec)
 
 ## 2026-09-20 คำสั่ง: /clarify
@@ -705,3 +927,134 @@
 - สิ่งที่แก้: เพิ่ม route ให้ `/auth?mode=register` แสดง `RegisterPage` ใน `frontend/src/App.jsx`; เพิ่ม test ยืนยัน route ใน `frontend/src/__tests__/setup.test.jsx`; เพิ่มและปิดสถานะ T-17 ใน `specs/001-searchbook/tasks.md`
 - ผลตรวจ: `cd frontend && npm test -- src/__tests__/setup.test.jsx` ผ่าน 2 tests; `git diff --check` ผ่าน
 - สิ่งที่ไม่เดา: ใช้ route `/auth?mode=register` ที่มีอยู่ในลิงก์หน้า Auth และไม่เปลี่ยนพฤติกรรมหน้า login หรือเพิ่มฟีเจอร์อื่น
+
+## 2026-11-13 คำสั่ง: /implement T-01 specs/004-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/tests/test_registration_models.py`, `specs/004-registration/tasks.md`, `prompt-log.md`
+- ผล test: `cd backend && pytest -q tests/test_registration_models.py` → 2 passed in 0.69s; smoke test กับ `TestClient(app)` คืน status root `{"status": "ok", "message": "ระบบพร้อมใช้งาน"}` และ `/api/registration/ready` คืน `{"success": true, "ready": true, "message": "ระบบลงทะเบียนเข้าชมงานพร้อมใช้งาน"}`; `cd frontend && npm run build` → build สำเร็จ
+- สิ่งที่ทำ: ตรวจสอบว่าฐานของ T-01 ตาม PRE-REG-01 มีการเปิดแอปและมีจุดเริ่มต้นสำหรับผู้ใช้ที่เข้าสู่ระบบแล้วไปยังกระบวนการลงทะเบียนอีเว้นต์ที่เป็นไปตาม requirement และย้ายสถานะของ task เป็น "เสร็จ รอทีมตรวจ"
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้ implementation ที่มีอยู่แล้วใน repo และไม่เพิ่มเงื่อนไขหรือฟีเจอร์ใหม่เกิน PRE-REG-01
+- ขอบเขต: ทำเฉพาะ T-01 ตาม tasks.md เท่านั้น ไม่เริ่ม task ถัดไป
+
+## 2026-11-13 คำสั่ง: /implement T-10 specs/004-registration/tasks.md
+
+- คำตอบทีมที่ปิด Open Questions:
+  - Q-02: บันทึก `user_id`, `event_id` และ `confirmation_snapshot` ที่ตรงกับข้อมูลยืนยัน
+  - Q-03: ไม่มีมาตรการเพิ่มเติมนอกเหนือจากการจำกัดสิทธิ์ตาม NFR-SEC-01/ASM-04
+  - Q-05: นักศึกษาและผู้ชมมีสิทธิ์ลงทะเบียนเข้าชมเหมือนกัน เรียกรวมว่า "ผู้เข้าชม"; การลงทะเบียนแข่งขันดนตรีอยู่นอกขอบเขต
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/permissions.py`, `backend/app/auth/session.py`, `backend/app/models/auth.py`, `backend/app/auth/login.py`, `backend/tests/test_auth_permissions.py`, `backend/tests/test_registration_access.py`, `specs/004-registration/spec.md`, `specs/004-registration/plan.md`, `specs/004-registration/tasks.md`, `prompt-log.md`
+- สิ่งที่ทำ: จำกัดการอ่านข้อมูลลงทะเบียนไว้ที่เจ้าของรายการหรือผู้จัดงาน; ให้ student/audience มีสิทธิ์ลงทะเบียนและกลุ่ม "ผู้เข้าชม" เหมือนกัน; ส่ง role เข้า session จาก login; กำหนด `confirmation_snapshot` เป็นข้อมูลจำเป็นใน model; ปิด Q-02/Q-03/Q-05 ใน spec และปรับ T-10 เป็น "เสร็จ รอทีมตรวจ"
+- ผล test: `cd backend && pytest -q tests/test_registration_access.py tests/test_auth_permissions.py tests/test_auth_login.py tests/test_auth_security.py tests/test_auth_registration.py tests/test_registration_models.py` → 17 passed, 1 warning จาก Starlette/httpx deprecation
+- ผลตรวจ diff: `git diff --check` ผ่าน
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ฟิลด์ข้อมูลยืนยัน, มาตรการเพิ่มเติม, คำเรียก/สิทธิ์กลุ่มผู้ใช้ และขอบเขตการแข่งขัน; ทีมยืนยันคำตอบก่อนแก้ spec และเริ่ม implement
+- เหตุผลที่แตะไฟล์นอกช่อง T-10 เดิม: ทีมอนุญาตให้ปรับ `spec.md`, `tasks.md`, `plan.md`, ส่ง role จาก `login.py`, และเพิ่ม/ปรับ tests เพื่อปิดคำถามและทดสอบผลตาม requirement
+
+## 2026-11-13 ผลตรวจเพิ่มเติม T-10
+
+- ผล test backend ทั้งหมด: `cd backend && pytest -q` → 21 passed, 1 warning จาก Starlette/httpx deprecation
+- ผลตรวจ diff: `git diff --check` ผ่าน
+
+## 2026-11-13 คำสั่ง: /tasks specs/005-cancel-registration/spec.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่สร้าง: `specs/005-cancel-registration/tasks.md`
+- ผลลัพธ์: สร้าง task list แบบ vertical slice แล้วเสร็จพร้อมตารางตรวจความครบ 3 ตาราง (AC, Constraint, FR) และสรุป Open Questions ที่ยังรอคำตอบด้วย T-08 ถึง T-10
+- สรุปสั้น: 5 เฟส, 10 task, 3 task อยู่ในสถานะ “รอ Q-xx” (T-08 ถึง T-10) และเฟสแรกที่ลองใช้งานได้จริงคือ เฟส 1 การดูข้อมูลและยืนยันก่อนยกเลิก
+- ข้อสรุป: ไม่เริ่ม implement ตามกติกา /tasks; task ถูกจัดระเบียบให้พร้อมสำหรับการเริ่มทำทีละเฟสตามลำดับ use case ที่ผู้ใช้เดินจริง
+
+## 2026-11-13 คำสั่ง: /implement T-01 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/routes.py`, `backend/tests/test_cancel_registration_base.py`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_cancel_registration_base.py` → 1 passed in 0.81s
+- สิ่งที่ทำ: เปิด route พื้นฐานสำหรับ flow ยกเลิกการลงทะเบียนด้วย `/api/cancel-registration/ready` และ `/api/cancel-registration/me` เพื่อให้ผู้ใช้ที่เข้าสู่ระบบแล้วสามารถเริ่มดูรายการลงทะเบียนของตนเองได้ตาม PRE-CXL-01 / FR-CXL-01; เพิ่ม test ตรวจว่าระบบพร้อมใช้งานและ route คืนข้อมูล list อย่างถูกต้อง
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราไม่เพิ่ม logic ยกเลิกจริงหรือสิทธิ์ขั้นสูงเกิน task T-01 และคงให้เงื่อนไข Q-04 ถึง Q-08 ไปยัง task ที่เหมาะสมต่อไป
+
+## 2026-11-13 คำสั่ง: /implement T-02 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/config.py`, `backend/app/models/auth.py`, `backend/app/auth/repository.py`, `backend/tests/test_registration_models.py`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_registration_models.py tests/test_cancel_registration_base.py` → 3 passed in 0.92s
+- สิ่งที่ทำ: เพิ่ม `Registration.status` สำหรับสถานะ `ลงทะเบียน`/`ยกเลิก`, เพิ่ม `Event.registered_count` สำหรับนับรายการที่ยังไม่ยกเลิก, และจัดเก็บค่านี้ใน repository เพื่อให้โครงข้อมูลรองรับ PRE-CXL-01 / FR-CXL-01 / FR-CXL-03 / ASM-01 / ASM-03 / ASM-04 โดยยึดค่าจาก `backend/app/config.py` แทนการฝังตัวเลขหรือ string ซ้ำ ๆ
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; งานนี้จำกัดแค่โครงข้อมูลและการนับอีเว้นต์ตาม spec ที่ชัดเจน แล้วปล่อย Q-04 ถึง Q-08 ไว้สำหรับ task ถัดไปตามที่ไม่ได้มีกำหนดจากสเปก
+
+## 2026-11-13 คำสั่ง: /implement T-03 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/cancel.py`, `backend/app/auth/repository.py`, `backend/app/auth/routes.py`, `backend/tests/test_cancel_registration_base.py`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_cancel_registration_base.py tests/test_registration_models.py` → 5 passed in 0.72s
+- สิ่งที่ทำ: สร้าง helper สำหรับดึงรายการลงทะเบียนที่ยังอยู่ในสถานะ "ลงทะเบียน" และใช้ใน `GET /api/cancel-registration/me` เพื่อคืนรายการที่เป็นของผู้ใช้จริง พร้อมระบุข้อความ "ไม่พบข้อมูลการลงทะเบียน" เมื่อไม่มีข้อมูลหรือทุกรายการถูกยกเลิกแล้ว; รวมทั้งปรับ repository ให้ค้นหารายการตาม `user_id` และ `registration_id` เพื่อรองรับการตรวจเจ้าของรายการใน task ต่อไป
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราไม่ตั้งกติกาใหม่เรื่องสิทธิ์แบบสมบูรณ์หรือกรณี Q-04 ที่ยังไม่ตอบ และคงให้ประเด็น Q-04 ถึง Q-08 เป็นเรื่อง task อนาคตตามที่ spec ระบุ
+
+## 2026-11-13 คำสั่ง: /implement T-04 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `frontend/src/pages/CancelRegistrationPage.jsx`, `frontend/src/api/client.js`, `frontend/src/__tests__/CancelRegistrationPage.test.jsx`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd frontend && npm test -- --run src/__tests__/CancelRegistrationPage.test.jsx` → 2 passed (2) in 1.38s
+- สิ่งที่ทำ: สร้างหน้า “การลงทะเบียนของฉัน” ตาม mockup UI-CXL-01 และ UI-CXL-02 ที่แสดงรายการที่ยังเป็น “ลงทะเบียน”, เปิดกล่องยืนยันก่อนยกเลิก, รองรับเลือก “ไม่ยืนยัน” ให้ข้อมูลคงเดิม และเมื่อยืนยันให้แสดงผล “ยกเลิกการลงทะเบียนแล้ว” ตาม FR-CXL-01, FR-CXL-02 และ FR-CXL-04
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราไม่เพิ่มความซับซ้อนเรื่อง atomicity หรือ Q-04 / Q-08 เพราะยังเป็นงานหน้าจอที่เพียงแสดงและจัดการ state ก่อนการยกเลิกจริงใน task ต่อไป
+
+## 2026-11-13 คำสั่ง: /implement T-05 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/repository.py`, `backend/app/auth/cancel.py`, `backend/app/auth/routes.py`, `backend/tests/test_auth_cancel_registration.py`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_cancel_registration_base.py tests/test_auth_cancel_registration.py` → 5 passed in 0.48s
+- สิ่งที่ทำ: สร้าง API ยืนยันการยกเลิกจริงที่ใช้ `POST /api/cancel-registration/cancel` (และ route แบบ path-param แบบรองรับ) เพื่อเปลี่ยนสถานะ `Registration` จาก "ลงทะเบียน" เป็น "ยกเลิก" พร้อมลด `Event.registered_count` และคืน `remaining_seats` ให้ตรงตาม ASM-01 / ASM-03; รักษาให้ทั้งสถานะและจำนวนอีเว้นต์อัปเดตภายใน repository เดียวด้วย lock เพื่อให้กระบวนการเป็น atomic ตามความเป็นไปได้ของโครงสร้างที่มีอยู่ใน task นี้
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: เราไม่ได้เพิ่ม audit log หรือชื่อตัวแปร FQ-07 เพราะ spec ยังคง open question และ task นี้ถูกจำกัดให้ใช้เฉพาะงานยกเลิกจริงและอัปเดตจำนวนตาม AC-CXL-02 / AC-CXL-03 เท่านั้น
+
+## 2026-11-13 คำสั่ง: /implement T-06 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `frontend/src/pages/CancelRegistrationPage.jsx`, `frontend/src/api/client.js`, `frontend/src/__tests__/CancelRegistrationPage.test.jsx`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd frontend && npm test -- --run src/__tests__/CancelRegistrationPage.test.jsx` → 2 passed (2) in 1.34s
+- สิ่งที่ทำ: เชื่อมหน้า “การลงทะเบียนของฉัน” กับ API ยืนยันยกเลิกจริงผ่าน `cancelRegistration()`, เมื่อกด “ยืนยันการยกเลิก” จะเรียก backend จริงก่อนปรับ state หน้า และแสดงผลสำเร็จ “ยกเลิกการลงทะเบียนแล้ว” พร้อมข้อความ “สถานะเปลี่ยนเป็น "ยกเลิก" และคืนที่นั่งให้อีเว้นต์แล้ว” ตาม AC-CXL-02 และ AC-CXL-03; กรณีไม่ยืนยันยังคงข้อมูลเดิมตาม FR-CXL-04
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้การเรียก API แบบตรงตาม requirement และยังคงให้ Open Questions Q-04 ถึง Q-08 เป็นเรื่องของ task ต่อไปที่ยังไม่ตอบใน spec
+
+## 2026-11-13 คำสั่ง: /implement T-07 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/tests/test_auth_cancel_registration.py`, `frontend/src/__tests__/CancelRegistrationPage.test.jsx`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_auth_cancel_registration.py tests/test_cancel_registration_base.py` และ `cd frontend && npm test -- --run src/__tests__/CancelRegistrationPage.test.jsx` → backend 6 passed, frontend 3 passed
+- สิ่งที่ทำ: เพิ่ม test สำหรับกรณีไม่พบข้อมูลการลงทะเบียนเมื่อยืนยันยกเลิกบน backend และเมื่อหน้าจอรับ response `success: false` จาก API ให้แสดงข้อความ “ไม่พบข้อมูลการลงทะเบียน” พร้อมคงรายการเดิมไว้ตาม AC-CXL-05 และ FR-CXL-05; ส่วนการลงทะเบียนที่ไม่มีข้อมูลหรือเป็นรายการยกเลิกแล้วยังคงถูกจัดว่า “ไม่พบข้อมูล” ตาม requirement ที่ชัดเจนใน spec
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; รักษาให้สิ่งที่ “ยังไม่ตอบใน spec” เช่น Q-04 / Q-07 / Q-08 ตามเดิม และไม่เพิ่มเงื่อนไขนอก scope ของ T-07
+
+## 2026-11-13 คำสั่ง: /implement T-08 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/repository.py`, `backend/app/auth/routes.py`, `backend/tests/test_auth_cancel_registration.py`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_auth_cancel_registration.py tests/test_cancel_registration_base.py` → 7 passed in 0.55s
+- สิ่งที่ทำ: ปิด Q-04 ด้วยการบังคับใช้การตรวจเจ้าของ Registration โดยใช้ session user_id ที่เข้าใช้งานจริง เทียบกับ `registration.user_id` ก่อนอนุญาตยกเลิก; ถ้าผิดกันหรือ session ไม่ถูกต้อง จะคืน `success: false` พร้อมข้อความ “คุณไม่มีสิทธิ์ยกเลิกการลงทะเบียนนี้” และไม่เปลี่ยนแปลงข้อมูลใด ๆ; รวมทั้งทดสอบกรณี mismatch จริงเพื่อยืนยันว่า logic ป้องกันไม่ให้ยกเลิกรายการที่ไม่ใช่ของผู้ใช้
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ทีมเลือกแนวทาง “ใช้ session ของผู้ใช้ปัจจุบันเปรียบเทียบกับ registration.user_id” เป็นคำตอบ Q-04 และจากนั้นจึงจัดการ permission check แบบนี้ โดยไม่แตะ Q-05 ถึง Q-08 ที่ยังต้องรอคำตอบใน spec
+
+## 2026-11-13 คำสั่ง: /implement T-09 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/repository.py`, `backend/tests/test_auth_cancel_registration.py`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_auth_cancel_registration.py tests/test_cancel_registration_base.py` → 8 passed in 0.51s
+- สิ่งที่ทำ: ปิด Q-05 ด้วยแนวทาง atomic transaction โดยบังคับให้อัปเดต `Registration.status` และ `Event.registered_count` ใน lock เดียวกันภายใน repository และเพิ่ม test `test_T_09_atomic_status_and_count_update` เพื่อยืนยันว่าหากยกเลิกสำเร็จทั้งสองส่วนจะอัปเดตพร้อมกัน และถ้าไม่สำเร็จไม่มีการเปลี่ยนแปลงแบบกึ่งสำเร็จ
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ทีมตอบ Q-05 ว่าใช้ atomic transaction แล้วจึงยืนยันว่าระบบต้องปรับทั้งสองส่วนพร้อมกันในครั้งเดียว โดยไม่เพิ่มเงื่อนไขพิเศษเหนือ spec อื่น ๆ
+
+## 2026-11-13 คำสั่ง: /implement T-10 specs/005-cancel-registration/tasks.md
+
+- เครื่องมือ: Copilot SDK ใน VS Code
+- ไฟล์ที่แก้/สร้าง: `backend/app/auth/repository.py`, `backend/app/auth/cancel.py`, `backend/tests/test_auth_cancel_registration.py`, `frontend/src/pages/CancelRegistrationPage.jsx`, `frontend/src/__tests__/CancelRegistrationPage.test.jsx`, `specs/005-cancel-registration/tasks.md`
+- ผล test: `cd backend && pytest -q tests/test_auth_cancel_registration.py tests/test_cancel_registration_base.py` → 9 passed in 0.49s; `cd frontend && npm test -- --run src/__tests__/CancelRegistrationPage.test.jsx` → 4 passed in 1.60s
+- สิ่งที่ทำ: ปิด Q-06/Q-07/Q-08 ด้วยการ (1) แสดงจำนวนผู้ลงทะเบียนปัจจุบันใน UI ของรายการยกเลิก, (2) บันทึก `cancelled_at` พร้อม `user_id`/`event_id` ในการยกเลิกจริงเพื่อตอบ Q-07, และ (3) รักษาแนวทาง “ไม่พบข้อมูล” สำหรับรายการที่ไม่มีจริงหรือไม่ใช่ของผู้ใช้ต่อไป ตามคำตอบของทีมที่เลือก “show_in_this_feature / user_id_event_id_cancelled_at / not_found_only”
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; ทีมตอบ Q-06 ถึง Q-08 ครบแล้ว และเราใช้คำตอบนั้นเป็นที่สุดโดยไม่เพิ่มความหมายอื่นที่ไม่ปรากฏใน spec
+
+## 2026-11-13 คำสั่ง: /testcases AC-CXL-01 specs/005-cancel-registration/
+
+- โหมด: ร่าง (ยังไม่มี `test-cases.md` ในโฟลเดอร์ฟีเจอร์ จึงสร้างตาม template แล้วเสนอแถวสำหรับ AC-CXL-01)
+- ไฟล์ที่สร้าง: `specs/005-cancel-registration/test-cases.md`
+- ผลลัพธ์: เสนอ 3 แถวแบบทางปกติ / ขอบ / ทางผิด สำหรับ AC-CXL-01
+- ส่วนที่ spec ไม่ได้บอกชัด: กรณียกเลิกรายการที่ไม่ใช่ของผู้ใช้หรือไม่มีข้อมูลที่ยังอยู่ในสถานะ "ลงทะเบียน" ต้องถามทีมเพิ่มเติมเรื่องข้อความและพฤติกรรม (รอ Q-04 / Q-08)
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราใช้เงื่อนไขจาก FR-CXL-02 / FR-CXL-03 / ASM-01 / ASM-03 และยอมรับว่ากรณีสิทธิ์/ไม่พบข้อมูลยังเป็น Open Question ตาม spec
+
+## 2026-11-13 คำสั่ง: /testcases AC-CXL-02 specs/005-cancel-registration/
+
+- โหมด: ร่าง
+- ไฟล์ที่แก้: `specs/005-cancel-registration/test-cases.md`
+- ผลลัพธ์: เพิ่ม 3 แถวสำหรับ AC-CXL-02 (ทางปกติ / ขอบ / ทางผิด) โดยยึด Then จาก AC-CXL-02 และ FR-CXL-03 ตาม spec เท่านั้น
+- ส่วนที่ spec ไม่ได้บอกชัด: กรณียกเลิกรายการที่มีอยู่แล้วเป็น "ยกเลิก" หรือไม่พบรายการจริง ยังเป็น Open Question (Q-08) จึงยังไม่สามารถตัดสินใจให้ผลลัพธ์ที่แน่นอนได้ และต้องรอทีมตรวจก่อนเปลี่ยนสถานะเป็น "ใช้ได้"
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี; เราไม่กำหนดข้อความหรือพฤติกรรมเกินที่ spec ระบุ

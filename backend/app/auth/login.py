@@ -83,7 +83,7 @@ def login_user(payload: Mapping[str, Any] | LoginUserInput, repository: AuthRepo
         user["lock_until"] = None
         user["last_login_at"] = now
 
-        session = create_session(int(user["id"]))
+        session = create_session(int(user["id"]), role=str(user["role"]))
     except ValueError:
         raise
     except Exception:

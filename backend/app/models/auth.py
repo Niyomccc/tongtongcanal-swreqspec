@@ -1,7 +1,9 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+from app.config import REGISTRATION_STATUS_CANCELLED, REGISTRATION_STATUS_REGISTERED
 
 
 class AuthBase(DeclarativeBase):
@@ -73,12 +75,56 @@ class RolePermission(AuthBase):
 
 
 class Session(AuthBase):
-    """ข้อมูล session ตาม FR-AUTH-03 และ NFR-SEC-01"""
+    """ข้อมูล session และบทบาทสำหรับตรวจสิทธิ์ตาม FR-AUTH-03 และ NFR-SEC-01"""
 
     __tablename__ = "auth_sessions"
 
     session_id: Mapped[str] = mapped_column(String, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("auth_users.id"), nullable=False)
+    role: Mapped[str | None] = mapped_column(String)
     issued_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class Event(AuthBase):
+    """ข้อมูลอีเว้นต์สำหรับลงทะเบียนตาม FR-REG-01, FR-REG-02, ASM-01 และ PRE-REG-01"""
+
+    __tablename__ = "registration_events"
+
+    event_id: Mapped[str] = mapped_column(String, primary_key=True)
+    registration_open: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    capacity: Mapped[int] = mapped_column(Integer, nullable=False)
+    remaining_seats: Mapped[int] = mapped_column(Integer, nullable=False)
+    registered_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class Registration(AuthBase):
+    """ข้อมูล user_id, event_id และ snapshot ที่ผู้ใช้ยืนยันตาม FR-REG-02, NFR-DAT-01 และ Q-02"""
+
+    __tablename__ = "event_registrations"
+
+    registration_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    event_id: Mapped[str] = mapped_column(
+        ForeignKey("registration_events.event_id"), nullable=False, index=True
+    )
+    user_id: Mapped[int] = mapped_column(ForeignKey("auth_users.id"), nullable=False, index=True)
+    status: Mapped[str] = mapped_column(
+        String,
+        nullable=False,
+        default=REGISTRATION_STATUS_REGISTERED,
+    )
+    registered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    confirmation_snapshot: Mapped[str] = mapped_column(Text, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "event_id", name="uq_event_registration_user_event"),
+    )
+
+    @property
+    def is_cancelled(self) -> bool:
+        """รองรับ PRE-CXL-01, FR-CXL-03 และ ASM-01: รายการที่ยกเลิกแล้วไม่ถูกนับเป็นคนลงทะเบียนที่ยังทำงานอยู่"""
+        return self.status == REGISTRATION_STATUS_CANCELLED

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import secrets
+from contextlib import nullcontext
 from hashlib import pbkdf2_hmac
 from typing import Any, Mapping
 
@@ -10,7 +11,9 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.auth.repository import AuthRepository
 from app.auth.validation import validate_registration_payload
-from app.config import PASSWORD_MIN_LENGTH
+from app.config import EVENT_REGISTRATION_LOW_SEAT_THRESHOLD, PASSWORD_MIN_LENGTH
+
+# รองรับ FR-REG-02 และ NFR-DAT-01: บันทึกการลงทะเบียนของผู้ใช้ให้ตรงกับข้อมูลที่ยืนยัน
 
 # รองรับ FR-AUTH-02, FR-AUTH-03, FR-AUTH-05 และ NFR-SEC-01
 PUBLIC_ROLES = {"student", "audience", "band"}
@@ -236,13 +239,122 @@ def register_user(payload: Mapping[str, Any] | RegisterUserInput, repository: Au
     }
 
 
+class RegisterEventInput(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    user_id: int | None = None
+    userId: int | None = None
+    event_id: str | None = None
+    eventId: str | None = None
+    confirmation_snapshot: dict[str, Any] | None = None
+    confirmationSnapshot: dict[str, Any] | None = None
+
+
+# รองรับ FR-REG-01 และ FR-REG-03: คำนวณจำนวนที่ว่างและแจ้งเตือนเมื่อเหลือน้อย
+
+def get_event_availability(event_id: str, repository: AuthRepository | None = None) -> dict[str, Any]:
+    repo = repository or AuthRepository()
+    event = repo.get_event(str(event_id).strip())
+    if event is None:
+        raise ValueError("ไม่พบอีเว้นต์ที่เลือก")
+
+    remaining_seats = int(event.get("remaining_seats", 0))
+    low_seat_warning = remaining_seats <= EVENT_REGISTRATION_LOW_SEAT_THRESHOLD
+    return {
+        "event_id": str(event_id).strip(),
+        "capacity": int(event.get("capacity", 0)),
+        "remaining_seats": remaining_seats,
+        "low_seat_warning": low_seat_warning,
+        "warning_message": (
+            f"เหลือที่นั่งไม่เกิน {EVENT_REGISTRATION_LOW_SEAT_THRESHOLD} ที่นั่ง"
+            if low_seat_warning
+            else None
+        ),
+    }
+
+
+# รองรับ FR-REG-02 และ NFR-DAT-01: บันทึกผู้ใช้เป็นผู้ลงทะเบียนอีเว้นต์และคงข้อมูลยืนยันให้ตรงกับผู้ใช้ที่ยืนยันจริง
+
+def register_for_event(
+    payload: Mapping[str, Any] | RegisterEventInput,
+    repository: AuthRepository | None = None,
+) -> dict[str, Any]:
+    if isinstance(payload, RegisterEventInput):
+        raw = payload.model_dump(exclude_none=True)
+    else:
+        raw = dict(payload)
+
+    user_id = raw.get("user_id")
+    if user_id is None:
+        user_id = raw.get("userId")
+    event_id = raw.get("event_id")
+    if event_id is None:
+        event_id = raw.get("eventId")
+    confirmation_snapshot = raw.get("confirmation_snapshot")
+    if confirmation_snapshot is None:
+        confirmation_snapshot = raw.get("confirmationSnapshot")
+
+    if user_id is None or event_id is None:
+        raise ValueError("ต้องระบุผู้ใช้และอีเว้นต์")
+    if confirmation_snapshot is not None and not isinstance(confirmation_snapshot, dict):
+        raise ValueError("ข้อมูลยืนยันต้องเป็นอ็อบเจ็กต์")
+
+    repo = repository or AuthRepository()
+    lock = getattr(repo, "_lock", None)
+    context = lock if lock is not None else nullcontext()
+    with context:
+        try:
+            registration = repo.register_for_event(
+                user_id=int(user_id),
+                event_id=str(event_id),
+                confirmation_snapshot=dict(confirmation_snapshot or {}),
+            )
+        except ValueError as exc:
+            message = str(exc)
+            if "ได้ลงทะเบียนอีเว้นต์นี้แล้ว" in message:
+                raise ValueError("ลงทะเบียนซ้ำไม่ได้ คุณลงทะเบียนอีเว้นต์นี้ไว้แล้ว") from exc
+            raise
+
+    current_event = get_event_availability(str(event_id), repository=repo)
+    return {
+        "success": True,
+        "message": "ลงทะเบียนสำเร็จ",
+        "registration": {
+            "registration_id": registration["registration_id"],
+            "event_id": registration["event_id"],
+            "user_id": registration["user_id"],
+            "confirmation_snapshot": registration["confirmation_snapshot"],
+        },
+        "remaining_seats": current_event["remaining_seats"],
+        "low_seat_warning": current_event["low_seat_warning"],
+        "warning_message": current_event["warning_message"],
+    }
+
+
 router = APIRouter()
 
 
+# รองรับ FR-REG-02: endpoint ลงทะเบียนอีเว้นต์ยังคงใช้ Contract ของ auth register สำหรับ payload ผู้ใช้ที่เข้าสู่ระบบแล้ว
 @router.post("/auth/register")
 @router.post("/api/auth/register")
 async def register_endpoint(payload: RegisterUserInput) -> dict[str, Any]:
     return register_user(payload)
 
 
-__all__ = ["RegisterUserInput", "register_user", "register_endpoint", "router"]
+@router.post("/api/registration/register")
+@router.post("/api/auth/register-event")
+@router.post("/auth/register-event")
+async def register_event_endpoint(payload: RegisterEventInput) -> dict[str, Any]:
+    return register_for_event(payload)
+
+
+__all__ = [
+    "RegisterUserInput",
+    "RegisterEventInput",
+    "get_event_availability",
+    "register_user",
+    "register_for_event",
+    "register_endpoint",
+    "register_event_endpoint",
+    "router",
+]

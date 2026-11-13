@@ -10,6 +10,10 @@ beforeEach(() => {
     success: true,
     redirectTo: '/dashboard',
   })
+  vi.spyOn(apiModule.api, 'registerEvent').mockResolvedValue({
+    success: true,
+    redirectTo: '/dashboard',
+  })
 })
 
 test('test_AC_AUTH_01_register_form', async () => {
@@ -55,4 +59,66 @@ test('test_AC_AUTH_01_register_form', async () => {
   await waitFor(() => {
     expect(navigateSpy).toHaveBeenCalledWith('/dashboard')
   })
+})
+
+test('test_AC_REG_04_reject_duplicate_registration', async () => {
+  const registerEventSpy = vi.spyOn(apiModule.api, 'registerEvent')
+  const user = { id: 101, fullName: 'สมชาย ใจดี', role: 'student' }
+  const events = [
+    {
+      id: 'evt-01',
+      name: 'ดนตรีในสวน ครั้งที่ 5',
+      date: 'ศ 20 พ.ย. 2569 · 16.00 น.',
+      location: 'ลานกิจกรรม อาคาร 5',
+      remainingSeats: 8,
+      capacity: 150,
+    },
+  ]
+
+  render(
+    <RegisterPage
+      mode="event"
+      user={user}
+      events={events}
+      existingRegistrationEventIds={['evt-01']}
+    />,
+  )
+
+  expect(screen.getAllByText(/ลงทะเบียนซ้ำไม่ได้/i).length).toBeGreaterThan(0)
+  expect(screen.getByText(/คุณลงทะเบียนอีเว้นต์นี้ไว้แล้ว/i)).toBeTruthy()
+
+  const submitButton = screen.getAllByRole('button', { name: /ลงทะเบียนซ้ำไม่ได้/i })[0]
+  fireEvent.click(submitButton)
+
+  expect(registerEventSpy).not.toHaveBeenCalled()
+})
+
+test('test_AC_REG_05_full_event_ui_message', async () => {
+  vi.spyOn(apiModule.api, 'registerEvent').mockResolvedValue({
+    success: false,
+    message: 'ที่นั่งเต็ม มีผู้ใช้อื่นยืนยันที่นั่งสุดท้ายก่อนคุณ จึงลงทะเบียนไม่สำเร็จ',
+  })
+
+  const user = { id: 101, fullName: 'สมชาย ใจดี', role: 'student' }
+  const events = [
+    {
+      id: 'evt-02',
+      name: 'ดนตรีในสวน ครั้งที่ 5',
+      date: 'ศ 20 พ.ย. 2569 · 16.00 น.',
+      location: 'ลานกิจกรรม อาคาร 5',
+      remainingSeats: 1,
+      capacity: 150,
+    },
+  ]
+
+  render(<RegisterPage mode="event" user={user} events={events} />)
+
+  fireEvent.click(screen.getByRole('button', { name: /ยืนยันการลงทะเบียน/i }))
+
+  await waitFor(() => {
+    expect(screen.getByRole('heading', { name: /ที่นั่งเต็ม/i })).toBeTruthy()
+    expect(screen.getByText(/มีผู้ใช้อื่นยืนยันที่นั่งสุดท้ายก่อนคุณ/i)).toBeTruthy()
+  })
+
+  expect(screen.getByText(/ดนตรีในสวน ครั้งที่ 5/i)).toBeTruthy()
 })
